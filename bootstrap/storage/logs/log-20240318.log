@@ -1,0 +1,88 @@
+<11>1 2024-03-18T11:20:02.741716+00:00 332a5406add7 - 60 app - ERROR: Slim\Exception\HttpNotFoundException: Not found. in /var/www/workdir/vendor/slim/slim/Slim/Middleware/RoutingMiddleware.php:76
+Stack trace:
+#0 /var/www/workdir/vendor/slim/slim/Slim/Middleware/RoutingMiddleware.php(44): Slim\Middleware\RoutingMiddleware->performRouting(Object(Slim\Http\ServerRequest))
+#1 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(121): Slim\Middleware\RoutingMiddleware->process(Object(Slim\Http\ServerRequest), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#2 /var/www/workdir/vendor/slim/slim/Slim/Middleware/ErrorMiddleware.php(76): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Http\ServerRequest))
+#3 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(121): Slim\Middleware\ErrorMiddleware->process(Object(Slim\Http\ServerRequest), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#4 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(65): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Http\ServerRequest))
+#5 /var/www/workdir/vendor/slim/slim/Slim/App.php(199): Slim\MiddlewareDispatcher->handle(Object(Slim\Http\ServerRequest))
+#6 /var/www/workdir/vendor/slim/slim/Slim/App.php(183): Slim\App->handle(Object(Slim\Http\ServerRequest))
+#7 /var/www/workdir/public/index.php(16): Slim\App->run()
+#8 {main} {"application":"Budget Control","request":"/1/add","procid":"65f82362b2d96"} 
+<11>1 2024-03-18T11:20:29.410982+00:00 332a5406add7 - 61 app - ERROR: Slim\Exception\HttpNotFoundException: Not found. in /var/www/workdir/vendor/slim/slim/Slim/Middleware/RoutingMiddleware.php:76
+Stack trace:
+#0 /var/www/workdir/vendor/slim/slim/Slim/Middleware/RoutingMiddleware.php(44): Slim\Middleware\RoutingMiddleware->performRouting(Object(Slim\Http\ServerRequest))
+#1 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(121): Slim\Middleware\RoutingMiddleware->process(Object(Slim\Http\ServerRequest), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#2 /var/www/workdir/vendor/slim/slim/Slim/Middleware/ErrorMiddleware.php(76): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Http\ServerRequest))
+#3 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(121): Slim\Middleware\ErrorMiddleware->process(Object(Slim\Http\ServerRequest), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#4 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(65): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Http\ServerRequest))
+#5 /var/www/workdir/vendor/slim/slim/Slim/App.php(199): Slim\MiddlewareDispatcher->handle(Object(Slim\Http\ServerRequest))
+#6 /var/www/workdir/vendor/slim/slim/Slim/App.php(183): Slim\App->handle(Object(Slim\Http\ServerRequest))
+#7 /var/www/workdir/public/index.php(16): Slim\App->run()
+#8 {main} {"request":"/1/add","procid":"65f8237d63e3f"} 
+<11>1 2024-03-18T11:20:41.176843+00:00 332a5406add7 - 64 app - ERROR: Slim\Exception\HttpNotFoundException: Not found. in /var/www/workdir/vendor/slim/slim/Slim/Middleware/RoutingMiddleware.php:76
+Stack trace:
+#0 /var/www/workdir/vendor/slim/slim/Slim/Middleware/RoutingMiddleware.php(44): Slim\Middleware\RoutingMiddleware->performRouting(Object(Slim\Http\ServerRequest))
+#1 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(121): Slim\Middleware\RoutingMiddleware->process(Object(Slim\Http\ServerRequest), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#2 /var/www/workdir/vendor/slim/slim/Slim/Middleware/ErrorMiddleware.php(76): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Http\ServerRequest))
+#3 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(121): Slim\Middleware\ErrorMiddleware->process(Object(Slim\Http\ServerRequest), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#4 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(65): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Http\ServerRequest))
+#5 /var/www/workdir/vendor/slim/slim/Slim/App.php(199): Slim\MiddlewareDispatcher->handle(Object(Slim\Http\ServerRequest))
+#6 /var/www/workdir/vendor/slim/slim/Slim/App.php(183): Slim\App->handle(Object(Slim\Http\ServerRequest))
+#7 /var/www/workdir/public/index.php(16): Slim\App->run()
+#8 {main} {"request":"/1/add","procid":"65f823892b0d9"} 
+<11>1 2024-03-18T11:21:10.302531+00:00 332a5406add7 - 57 app - ERROR: Slim\Exception\HttpNotFoundException: Not found. in /var/www/workdir/vendor/slim/slim/Slim/Middleware/RoutingMiddleware.php:76
+Stack trace:
+#0 /var/www/workdir/vendor/slim/slim/Slim/Middleware/RoutingMiddleware.php(44): Slim\Middleware\RoutingMiddleware->performRouting(Object(Slim\Http\ServerRequest))
+#1 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(121): Slim\Middleware\RoutingMiddleware->process(Object(Slim\Http\ServerRequest), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#2 /var/www/workdir/vendor/slim/slim/Slim/Middleware/ErrorMiddleware.php(76): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Http\ServerRequest))
+#3 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(121): Slim\Middleware\ErrorMiddleware->process(Object(Slim\Http\ServerRequest), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#4 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(65): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Http\ServerRequest))
+#5 /var/www/workdir/vendor/slim/slim/Slim/App.php(199): Slim\MiddlewareDispatcher->handle(Object(Slim\Http\ServerRequest))
+#6 /var/www/workdir/vendor/slim/slim/Slim/App.php(183): Slim\App->handle(Object(Slim\Http\ServerRequest))
+#7 /var/www/workdir/public/index.php(16): Slim\App->run()
+#8 {main} {"request":"/1/add","procid":"65f823a649c54"} 
+<11>1 2024-03-18T11:21:39.859035+00:00 332a5406add7 - 59 app - ERROR: Slim\Exception\HttpNotFoundException: Not found. in /var/www/workdir/vendor/slim/slim/Slim/Middleware/RoutingMiddleware.php:76
+Stack trace:
+#0 /var/www/workdir/vendor/slim/slim/Slim/Middleware/RoutingMiddleware.php(44): Slim\Middleware\RoutingMiddleware->performRouting(Object(Slim\Http\ServerRequest))
+#1 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(121): Slim\Middleware\RoutingMiddleware->process(Object(Slim\Http\ServerRequest), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#2 /var/www/workdir/vendor/slim/slim/Slim/Middleware/ErrorMiddleware.php(76): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Http\ServerRequest))
+#3 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(121): Slim\Middleware\ErrorMiddleware->process(Object(Slim\Http\ServerRequest), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#4 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(65): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Http\ServerRequest))
+#5 /var/www/workdir/vendor/slim/slim/Slim/App.php(199): Slim\MiddlewareDispatcher->handle(Object(Slim\Http\ServerRequest))
+#6 /var/www/workdir/vendor/slim/slim/Slim/App.php(183): Slim\App->handle(Object(Slim\Http\ServerRequest))
+#7 /var/www/workdir/public/index.php(16): Slim\App->run()
+#8 {main} {"request":"/1/add","procid":"65f823c3d1b2f"} 
+<11>1 2024-03-18T11:22:10.908488+00:00 332a5406add7 - 60 app - ERROR: Slim\Exception\HttpNotFoundException: Not found. in /var/www/workdir/vendor/slim/slim/Slim/Middleware/RoutingMiddleware.php:76
+Stack trace:
+#0 /var/www/workdir/vendor/slim/slim/Slim/Middleware/RoutingMiddleware.php(44): Slim\Middleware\RoutingMiddleware->performRouting(Object(Slim\Http\ServerRequest))
+#1 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(121): Slim\Middleware\RoutingMiddleware->process(Object(Slim\Http\ServerRequest), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#2 /var/www/workdir/vendor/slim/slim/Slim/Middleware/ErrorMiddleware.php(76): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Http\ServerRequest))
+#3 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(121): Slim\Middleware\ErrorMiddleware->process(Object(Slim\Http\ServerRequest), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#4 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(65): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Http\ServerRequest))
+#5 /var/www/workdir/vendor/slim/slim/Slim/App.php(199): Slim\MiddlewareDispatcher->handle(Object(Slim\Http\ServerRequest))
+#6 /var/www/workdir/vendor/slim/slim/Slim/App.php(183): Slim\App->handle(Object(Slim\Http\ServerRequest))
+#7 /var/www/workdir/public/index.php(16): Slim\App->run()
+#8 {main} {"request":"/1/add","procid":"65f823e2ddc6f"} 
+<11>1 2024-03-18T11:22:22.435428+00:00 332a5406add7 - 64 app - ERROR: Slim\Exception\HttpNotFoundException: Not found. in /var/www/workdir/vendor/slim/slim/Slim/Middleware/RoutingMiddleware.php:76
+Stack trace:
+#0 /var/www/workdir/vendor/slim/slim/Slim/Middleware/RoutingMiddleware.php(44): Slim\Middleware\RoutingMiddleware->performRouting(Object(Slim\Http\ServerRequest))
+#1 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(121): Slim\Middleware\RoutingMiddleware->process(Object(Slim\Http\ServerRequest), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#2 /var/www/workdir/vendor/slim/slim/Slim/Middleware/ErrorMiddleware.php(76): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Http\ServerRequest))
+#3 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(121): Slim\Middleware\ErrorMiddleware->process(Object(Slim\Http\ServerRequest), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#4 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(65): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Http\ServerRequest))
+#5 /var/www/workdir/vendor/slim/slim/Slim/App.php(199): Slim\MiddlewareDispatcher->handle(Object(Slim\Http\ServerRequest))
+#6 /var/www/workdir/vendor/slim/slim/Slim/App.php(183): Slim\App->handle(Object(Slim\Http\ServerRequest))
+#7 /var/www/workdir/public/index.php(16): Slim\App->run()
+#8 {main} {"request":"/1/add","procid":"65f823ee6a47c"} 
+<11>1 2024-03-18T11:22:27.908364+00:00 332a5406add7 - 57 app - ERROR: Slim\Exception\HttpNotFoundException: Not found. in /var/www/workdir/vendor/slim/slim/Slim/Middleware/RoutingMiddleware.php:76
+Stack trace:
+#0 /var/www/workdir/vendor/slim/slim/Slim/Middleware/RoutingMiddleware.php(44): Slim\Middleware\RoutingMiddleware->performRouting(Object(Slim\Http\ServerRequest))
+#1 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(121): Slim\Middleware\RoutingMiddleware->process(Object(Slim\Http\ServerRequest), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#2 /var/www/workdir/vendor/slim/slim/Slim/Middleware/ErrorMiddleware.php(76): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Http\ServerRequest))
+#3 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(121): Slim\Middleware\ErrorMiddleware->process(Object(Slim\Http\ServerRequest), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#4 /var/www/workdir/vendor/slim/slim/Slim/MiddlewareDispatcher.php(65): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Http\ServerRequest))
+#5 /var/www/workdir/vendor/slim/slim/Slim/App.php(199): Slim\MiddlewareDispatcher->handle(Object(Slim\Http\ServerRequest))
+#6 /var/www/workdir/vendor/slim/slim/Slim/App.php(183): Slim\App->handle(Object(Slim\Http\ServerRequest))
+#7 /var/www/workdir/public/index.php(16): Slim\App->run()
+#8 {main} {"request":"/1/add","procid":"65f823f3ddbe9"} 
