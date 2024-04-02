@@ -131,4 +131,24 @@ class WorkspaceController {
 
         return response($toUpdate->toArray(),201);
     }
+
+    /**
+     * Update the current workspace.
+     *
+     * @param Request $request The HTTP request object.
+     * @param Response $response The HTTP response object.
+     * @param mixed $arg Additional arguments.
+     * @return Response The updated HTTP response object.
+     */
+    public function activate(Request $request, Response $response, $arg): Response
+    {
+        $wsId = $arg['wsId'];
+        $userId = $arg['userId'];
+        if(Workspace::where('uuid',$wsId)->count() == 0){
+            return response(["error" => "No workspaces found"],404);
+        }
+
+        WorkspaceService::activateWorkspace($wsId, $userId);
+        return response([],201);
+    }
 }

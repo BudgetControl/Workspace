@@ -4,6 +4,7 @@
 
 /vendor/*
 /config/app.php
+/storage/*
 
 /tmp/cache/models/*
 !/tmp/cache/models/empty

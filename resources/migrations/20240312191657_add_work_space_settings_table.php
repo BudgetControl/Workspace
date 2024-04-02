@@ -26,7 +26,7 @@ final class AddWorkSpaceSettingsTable extends AbstractMigration
             ->addColumn('created_at', 'datetime')
             ->addColumn('updated_at', 'datetime', ['null' => true])
             ->addColumn('deleted_at', 'datetime', ['null' => true])
-            ->addIndex(['workspace_id'])
+            ->addIndex(['workspace_id'],['unique' => true])
             ->create();
     }
 }

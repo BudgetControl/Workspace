@@ -21,12 +21,12 @@ final class WorkspacesUserTable extends AbstractMigration
     {
         $workspacesUsers = $this->table('workspaces_users_mm');
         $workspacesUsers
-            ->addColumn('workspace_id', 'integer', ['signed' => false])
-            ->addColumn('user_id', 'integer', ['signed' => false])
+            ->addColumn('workspace_id', 'biginteger', ['signed' => false])
+            ->addColumn('workspace_id', 'biginteger', ['signed' => false])
             ->addColumn('created_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('updated_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
             ->addForeignKey('workspace_id', 'workspaces', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
-            ->addForeignKey('user_id', 'users', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
+            ->addForeignKey('workspace_id', 'users', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
             ->create();
     }
 }

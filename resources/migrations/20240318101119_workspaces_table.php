@@ -19,10 +19,12 @@ final class WorkspacesTable extends AbstractMigration
      */
     public function change(): void
     {
-        $this->table('workspaces')
+        $this->table('workspaces', ['id' => false])
+            ->addColumn('id', 'biginteger', ['signed' => false, 'identity' => true])
             ->addColumn('uuid', 'string', ['limit' => 36])
             ->addColumn('name', 'string', ['limit' => 100])
             ->addColumn('description', 'text', ['null' => true])
+            ->addColumn('active', 'bool', ['default' => 0])
             ->addColumn('created_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('updated_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP', 'update' => 'CURRENT_TIMESTAMP'])
             ->addColumn('deleted_at', 'datetime', ['null' => true])

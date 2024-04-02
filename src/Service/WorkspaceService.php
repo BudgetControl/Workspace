@@ -131,10 +131,32 @@ class WorkspaceService
         $ws = Capsule::select("
         SELECT w.uuid, w.name, w.updated_at FROM budgetV2.workspaces as w
         inner join workspaces_users_mm as ws on ws.workspace_id = w.id
-        where ws.user_id = $userId and w.deleted_at is null
+        where ws.workspace_id = $userId and w.deleted_at is null
         order by w.updated_at desc;
         ");
 
         return $ws;
+    }
+    
+    /**
+     * Sets the current workspace for a user.
+     *
+     * @param string $wsId The ID of the workspace to set as current.
+     * @param int $userId The ID of the user.
+     * @return void
+     */
+    public static function activateWorkspace(string $wsId, int $userId): void
+    {
+        $workspaces = self::getWorkspacesList($userId);
+        foreach($workspaces as $workspace) {
+            $current = false;
+            if($workspace->uuid == $wsId) {
+                $current = true;
+            }
+
+            $ws = ModelWorkspace::where('uuid', $wsId)->first();
+                $ws->current = $current;
+                $ws->save();
+        }
     }
 }
