@@ -20,47 +20,47 @@ final class AlterTablesAddWorkspaceIdColumns extends AbstractMigration
     public function change(): void
     {
         $this->table('accounts')
-            ->addColumn('workspace_id', 'biginteger', ['signed' => false])
+            ->changeColumn('workspace_id', 'biginteger', ['signed' => false])
             ->update();
 
         $this->table('budgets')
-            ->addColumn('workspace_id', 'biginteger', ['signed' => false])
+            ->changeColumn('workspace_id', 'biginteger', ['signed' => false])
             ->update();
 
         $this->table('entries')
-            ->addColumn('workspace_id', 'biginteger', ['signed' => false])
+            ->changeColumn('workspace_id', 'biginteger', ['signed' => false])
             ->update();
 
         $this->table('labels')
-            ->addColumn('workspace_id', 'biginteger', ['signed' => false])
+            ->changeColumn('workspace_id', 'biginteger', ['signed' => false])
             ->update();
 
         $this->table('models')
-            ->addColumn('workspace_id', 'biginteger', ['signed' => false])
+            ->changeColumn('workspace_id', 'biginteger', ['signed' => false])
             ->update();
 
         $this->table('payees')
-            ->addColumn('workspace_id', 'biginteger', ['signed' => false])
+            ->changeColumn('workspace_id', 'biginteger', ['signed' => false])
             ->update();
 
         $this->table('planned_entries')
-            ->addColumn('workspace_id', 'biginteger', ['signed' => false])
+            ->changeColumn('workspace_id', 'biginteger', ['signed' => false])
             ->update();
 
         $this->table('sub_categories')
-            ->addColumn('workspace_id', 'biginteger', ['signed' => false])
+            ->changeColumn('workspace_id', 'biginteger', ['signed' => false])
             ->update();
 
         $this->table('user_settings')
-            ->addColumn('workspace_id', 'biginteger', ['signed' => false])
+            ->changeColumn('workspace_id', 'biginteger', ['signed' => false])
             ->update();
 
         $this->table('payments_types')
-            ->addColumn('workspace_id', 'biginteger', ['signed' => false])
+            ->changeColumn('workspace_id', 'biginteger', ['signed' => false])
             ->update();
 
         $this->table('users')
-            ->addColumn('workspace_id', 'biginteger', ['signed' => false])
+            ->changeColumn('workspace_id', 'biginteger', ['signed' => false])
             ->update();
 
         
