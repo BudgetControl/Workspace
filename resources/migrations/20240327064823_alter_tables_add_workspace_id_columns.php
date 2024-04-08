@@ -47,22 +47,9 @@ final class AlterTablesAddWorkspaceIdColumns extends AbstractMigration
             ->changeColumn('workspace_id', 'biginteger', ['signed' => false])
             ->update();
 
-        $this->table('sub_categories')
-            ->changeColumn('workspace_id', 'biginteger', ['signed' => false])
-            ->update();
-
         $this->table('user_settings')
             ->changeColumn('workspace_id', 'biginteger', ['signed' => false])
             ->update();
 
-        $this->table('payments_types')
-            ->changeColumn('workspace_id', 'biginteger', ['signed' => false])
-            ->update();
-
-        $this->table('users')
-            ->changeColumn('workspace_id', 'biginteger', ['signed' => false])
-            ->update();
-
-        
     }
 }

@@ -47,20 +47,9 @@ final class AlterTablesAddUForeignKeys extends AbstractMigration
             ->addForeignKey('workspace_id', 'workspaces', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
             ->update();
 
-        $this->table('sub_categories')
-            ->addForeignKey('workspace_id', 'workspaces', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
-            ->update();
-
         $this->table('user_settings')
             ->addForeignKey('workspace_id', 'workspaces', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
             ->update();
 
-        $this->table('payments_types')
-            ->addForeignKey('workspace_id', 'workspaces', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
-            ->update();
-
-        $this->table('users')
-            ->addForeignKey('workspace_id', 'workspaces', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
-            ->update();
     }
 }

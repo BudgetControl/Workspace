@@ -48,7 +48,7 @@ final class AlterTablesRemoveUserIdColumns extends AbstractMigration
             ->update();
 
         $this->table('sub_categories')
-            ->renameColumn('user_id', 'workspace_id')
+            ->removeColumn('user_id')
             ->update();
 
         $this->table('user_settings')
