@@ -3,16 +3,9 @@ dotenv:
   - ".env"
 tasks:
   build:
-    desc: Build production enviroment
-    cmds:
-      - docker-compose up -d
-      - docker container cp bin/apache/workspace.conf budgetcontrol-ms-workspace:/etc/apache2/sites-available/budgetcontrol.cloud.conf
-      - docker container exec budgetcontrol-ms-workspace service apache2 restart
-      - docker container exec budgetcontrol-ms-workspace vendor/bin/phinx migrate
   build:dev:
     desc: Build production enviroment
     cmds:
       - docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
-      - docker container cp bin/apache/workspace.conf budgetcontrol-ms-workspace:/etc/apache2/sites-available/budgetcontrol.cloud.conf
+      - docker container cp bin/apache/default.conf budgetcontrol-ms-workspace:/etc/apache2/sites-available/budgetcontrol.cloud.conf
       - docker container exec budgetcontrol-ms-workspace service apache2 restart
-      - docker container exec budgetcontrol-ms-workspace vendor/bin/phinx migrate
