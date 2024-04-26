@@ -24,7 +24,7 @@ final class WorkspacesTable extends AbstractMigration
             ->addColumn('uuid', 'string', ['limit' => 36])
             ->addColumn('name', 'string', ['limit' => 100])
             ->addColumn('description', 'text', ['null' => true])
-            ->addColumn('active', 'integer', ['default' => 0])
+            ->addColumn('current', 'integer', ['default' => 0])
             ->addColumn('created_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('updated_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP', 'update' => 'CURRENT_TIMESTAMP'])
             ->addColumn('deleted_at', 'datetime', ['null' => true])
