@@ -60,7 +60,11 @@ $formatter = new \Monolog\Formatter\SyslogFormatter();
 $streamHandler->setFormatter($formatter);
 $logger->pushHandler($streamHandler);
 
+/** mail configuration */
+require_once __DIR__ . '/../config/mail.php';
+
 Facade::setFacadeApplication([
     'log' => $logger,
-    'date' => new Date()
+    'date' => new Date(),
+    'mail' => $mail
 ]);

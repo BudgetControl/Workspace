@@ -1,6 +1,8 @@
 <?php
+
 namespace Budgetcontrol\Workspace\Controller;
 
+use Budgetcontrol\Workspace\Domain\Model\User;
 use Budgetcontrol\Workspace\Domain\Model\Workspace;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -13,7 +15,8 @@ use Throwable;
  * This class is responsible for handling workspace-related operations.
  * It contains methods for creating, updating, and deleting workspaces.
  */
-class WorkspaceController {
+class WorkspaceController
+{
 
     /**
      * List all workspaces.
@@ -28,10 +31,30 @@ class WorkspaceController {
         $userId = $arg['userId'];
         $service = WorkspaceService::getWorkspacesList($userId);
 
-        if(empty($service)){
-            return response(["error" => "No workspaces found"],404);
+        if (empty($service)) {
+            return response(["error" => "No workspaces found"], 404);
         }
-        
+
+        return response($service);
+    }
+
+    /**
+     * List all workspaces of current user.
+     *
+     * @param Request $request The HTTP request object.
+     * @param Response $response The HTTP response object.
+     * @param mixed $arg Additional arguments.
+     * @return Response The HTTP response object.
+     */
+    public function listByUser(Request $request, Response $response, $arg): Response
+    {
+        $userId = $arg['userId'];
+        $service = WorkspaceService::getWorkspacesUserList($userId);
+
+        if (empty($service)) {
+            return response(["error" => "No workspaces found"], 404);
+        }
+
         return response($service);
     }
 
@@ -48,10 +71,10 @@ class WorkspaceController {
         $userId = $arg['userId'];
         $service = WorkspaceService::getLastWorkspace($userId);
 
-        if(empty($service)){
-            return response(["error" => "No workspaces found"],404);
+        if (empty($service)) {
+            return response(["error" => "No workspaces found"], 404);
         }
-        
+
         return response($service->toArray());
     }
 
@@ -65,20 +88,20 @@ class WorkspaceController {
      * @return Response The HTTP response object.
      */
     public function get(Request $request, Response $response, $arg): Response
-    {   
+    {
         // check if ws exists
-        if(Workspace::where('uuid',$arg['wsId'])->count() == 0){
-            return response(["error" => "No workspaces found"],404);
+        if (Workspace::where('uuid', $arg['wsId'])->count() == 0) {
+            return response(["error" => "No workspaces found"], 404);
         }
 
         $userId = $arg['userId'];
         $workspaceService = new WorkspaceService($userId, $arg['wsId']);
         $workspace = $workspaceService->getWorkspace();
-        
+
         return response($workspace->toArray());
     }
 
-    
+
     /**
      * Add a new workspace.
      *
@@ -93,16 +116,20 @@ class WorkspaceController {
             $userId = $arg['userId'];
             $params = $request->getParsedBody();
             $wsName = $params['name'];
-            $wsDescription = $params['description'];
+            $wsDescription = $params['description'] ?? '';
             $toInsert = WorkspaceService::createNewWorkspace($wsName, $wsDescription, $userId);
-        }catch(Throwable $e){
-            return response(["error" => $e->getMessage()],500);
+            $wsId = $toInsert->getWorkspace()->uuid;
+
+            $service = new WorkspaceService($arg['userId'], $wsId);
+            $service->shareWith($params['shareWith']);
+        } catch (Throwable $e) {
+            return response(["error" => $e->getMessage()], 500);
         }
 
-        return response($toInsert->toArray(),201);
+        return response($toInsert->toArray(), 201);
     }
 
-   
+
     /**
      * Update a workspace.
      *
@@ -113,23 +140,26 @@ class WorkspaceController {
     public function update(Request $request, Response $response, $arg): Response
     {
         // check if ws exists
-        if( Workspace::where('uuid',$arg['wsId'])->count() == 0){
-            return response(["error" => "No workspaces found"],404);
+        if (Workspace::where('uuid', $arg['wsId'])->count() == 0) {
+            return response(["error" => "No workspaces found"], 404);
         }
 
         try {
             $requestBody = $request->getParsedBody();
-            Workspace::where('uuid',$arg['wsId'])->first()
-            ->update(
-                $requestBody
-            );
+            $workspace = Workspace::where('uuid', $arg['wsId'])->first();
+            $workspace->name = $requestBody['name'];
+            $workspace->description = $requestBody['description'] ?? null;
+            $workspace->save();
+
+            $service = new WorkspaceService($arg['userId'], $arg['wsId']);
+            $service->shareWith($requestBody['shareWith']);
 
             $toUpdate = Workspace::byUuid($arg['wsId'])->first();
-        }catch(Throwable $e){
-            return response(["error" => $e->getMessage()],500);
+        } catch (Throwable $e) {
+            return response(["error" => $e->getMessage()], 500);
         }
 
-        return response($toUpdate->toArray(),201);
+        return response($toUpdate->toArray(), 201);
     }
 
     /**
@@ -144,11 +174,27 @@ class WorkspaceController {
     {
         $wsId = $arg['wsId'];
         $userId = $arg['userId'];
-        if(Workspace::where('uuid',$wsId)->count() == 0){
-            return response(["error" => "No workspaces found"],404);
+        if (Workspace::where('uuid', $wsId)->count() == 0) {
+            return response(["error" => "No workspaces found"], 404);
         }
 
         WorkspaceService::activateWorkspace($wsId, $userId);
-        return response([],201);
+        return response([], 201);
+    }
+
+    public function share(Request $request, Response $response, $arg): Response
+    {
+        $wsId = $arg['wsId'];
+        $params = $request->getParsedBody();
+
+        $userToShare = $params['user_to_share'];
+        $user = $user = User::where('uuid', $userToShare);
+
+        if ($user->count() == 0) {
+            return response(["error" => "No user found"], 404);
+        }
+
+        WorkspaceService::shareWorkspace($wsId, $user->first());
+        return response([], 201);
     }
 }

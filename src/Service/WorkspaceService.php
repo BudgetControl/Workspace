@@ -2,6 +2,7 @@
 
 namespace Budgetcontrol\Workspace\Service;
 
+use Budgetcontrol\SdkMailer\View\Mail as ViewMail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Budgetcontrol\Workspace\Domain\Model\User;
@@ -9,6 +10,7 @@ use Budgetcontrol\Workspace\Domain\Model\WorkspaceSettings;
 use Budgetcontrol\Workspace\Domain\Entity\Workspace;
 use Budgetcontrol\Workspace\Exceptions\WorkspaceException;
 use Budgetcontrol\Workspace\Domain\Model\Workspace as ModelWorkspace;
+use Budgetcontrol\Workspace\Facade\Mail;
 
 /**
  * Represents a service for managing workspaces.
@@ -16,16 +18,18 @@ use Budgetcontrol\Workspace\Domain\Model\Workspace as ModelWorkspace;
 class WorkspaceService
 {
     private Workspace $workspace;
+    private int $userId;
 
     CONST CONFIGURATION = 'app_configurations';
 
     public function __construct(int $userId, string $uuid = null)
-    {
+    {   
+        $this->userId = $userId;
         if(empty($uuid)) {
             $this->workspace = self::getLastWorkspace($userId);
         }else{
             $this->workspace = new Workspace(
-                ModelWorkspace::where('uuid', $uuid)->first(),
+                ModelWorkspace::where('uuid', $uuid)->with('users')->first(),
                 WorkspaceSettings::where('workspace_id', ModelWorkspace::where('uuid', $uuid)->first()->id)->first(),
                 User::find($userId)
             );
@@ -48,6 +52,7 @@ class WorkspaceService
         $workspace = new ModelWorkspace();
         $workspace->name = $name;
         $workspace->description = $wsDescription;
+        $workspace->user_id = $userId;
         $workspace->uuid = \Ramsey\Uuid\Uuid::uuid4()->toString();
         $workspace->save();
 
@@ -102,10 +107,10 @@ class WorkspaceService
     public static function getLastWorkspace(int $userId): Workspace
     {
         $ws = Capsule::select("
-        SELECT workspaces.id as wsid FROM budgetV2.workspaces
+        SELECT workspaces.id as wsid FROM budgetV2.workspaces as w
         inner join workspaces_users as ws on ws.workspace_id = workspaces.id
         left join users on ws.workspace_id = users.id
-        where workspace_id = $userId
+        where workspace_id = $userId and w.user_id = $userId
         order by workspaces.updated_at desc
         limit 1;
         ");
@@ -131,7 +136,24 @@ class WorkspaceService
         $ws = Capsule::select("
         SELECT w.uuid, w.name, w.updated_at FROM budgetV2.workspaces as w
         inner join workspaces_users_mm as ws on ws.workspace_id = w.id
-        where ws.workspace_id = $userId and w.deleted_at is null
+        where ws.user_id = $userId and w.deleted_at is null
+        order by w.updated_at desc;
+        ");
+
+        return $ws;
+    }
+
+
+    /**
+     * get list of workspaces
+     */
+    public static function getWorkspacesUserList(int $userId): array
+    {
+        $ws = Capsule::select("
+        SELECT w.uuid, w.name, w.updated_at FROM budgetV2.workspaces as w
+        inner join workspaces_users_mm as ws on ws.workspace_id = w.id
+        where ws.user_id = $userId and w.deleted_at is null
+        and w.user_id = $userId
         order by w.updated_at desc;
         ");
 
@@ -158,5 +180,59 @@ class WorkspaceService
                 $ws->current = $current;
                 $ws->save();
         }
+    }
+
+    /**
+     * Shares a workspace with a user.
+     *
+     * @param string $wsId The ID of the workspace to be shared.
+     * @param User $user The user to share the workspace with.
+     * @return void
+     */
+    public static function shareWorkspace(string $wsId, User $user): void
+    {
+        $ws = ModelWorkspace::where('uuid', $wsId)->first();
+        $ws->users()->attach($user);
+    }
+
+    public function shareWith(array $usersToShare): void
+    {
+        //first remove all relations
+        $this->workspace->getWorkspace()->users()->detach();
+
+        //atttach current user
+        $this->workspace->getWorkspace()->users()->attach($this->workspace->getUser());
+
+        foreach($usersToShare as $user) {
+            $userFound = User::where('uuid', $user['uuid'])->first();
+            if(empty($userFound)) {
+                Log::error("No user found with id: " . $userFound);
+            }
+
+            $this->workspace->getWorkspace()->users()->attach($userFound);
+
+            try{
+                $emailView = new ViewMail();
+                $emailView->setData([
+                    'message' => $this->workspace->getUser()->name." has just shared his Wallet (".$this->workspace->getWorkspace()->name.") with you. Access Budget Control to view it",
+                ]);
+                Mail::sendMail($user['email'], 'Workspace shared', $emailView);
+            } catch (\Throwable $e) {
+                Log::error("Error sharing workspace, could not send email: " . $e->getMessage());
+            }
+        }
+        
+    }
+
+    public function workspaceRelationsUsers(int $wsId): array
+    {
+        $currentUserId = $this->userId;
+        $users = Capsule::select("
+        SELECT users.uuid, users.email, users.name FROM budgetV2.users
+        inner join workspaces_users_mm as ws on ws.user_id = users.id
+        where ws.workspace_id = $wsId and users.id != $currentUserId;
+        ");
+
+        return $users;
     }
 }
