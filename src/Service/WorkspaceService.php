@@ -214,7 +214,7 @@ class WorkspaceService
             try{
                 $emailView = new ViewMail();
                 $emailView->setData([
-                    'message' => "Workspace shared",
+                    'message' => $this->workspace->getUser()->name." has just shared his Wallet (".$this->workspace->getWorkspace()->name.") with you. Access Budget Control to view it",
                 ]);
                 Mail::sendMail($user['email'], 'Workspace shared', $emailView);
             } catch (\Throwable $e) {
