@@ -3,9 +3,9 @@
     "description": "defines the dependencies required for a PHP microservice managing workspaces in a Budget application",
     "type": "none",
     "repositories": {
-        "budgetcontrol/libs-mailer": {
+        "mlabfactory/libs-mailer": {
             "type": "vcs",
-            "url": "https://github.com/BudgetControl/Libs_Mailer.git"
+            "url": "https://github.com/Mlabfactory/Libs_Mailer.git"
         }
     },
     "require": {
@@ -26,7 +26,7 @@
         "illuminate/events": "^11.0",
         "symfony/property-access": "^7.0",
         "illuminate/filesystem": "^11.0",
-        "budgetcontrol/libs-mailer": "v1.1"
+        "mlabfactory/libs-mailer": "v1.1.4"
     },
     "require-dev": {
         "nikic/php-parser": "^5.0",

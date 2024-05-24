@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "057fe0cde4969f944f51c079eadcf07e",
+    "content-hash": "fc3bfbd140d7d198734e6db48e334653",
     "packages": [
         {
             "name": "brick/math",
@@ -65,47 +65,6 @@
                 }
             ],
             "time": "2023-11-29T23:19:16+00:00"
-        },
-        {
-            "name": "budgetcontrol/libs-mailer",
-            "version": "1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/BudgetControl/Libs_Mailer.git",
-                "reference": "f47104ee6b53ce685469012a7558b25bf6d459d7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/BudgetControl/Libs_Mailer/zipball/f47104ee6b53ce685469012a7558b25bf6d459d7",
-                "reference": "f47104ee6b53ce685469012a7558b25bf6d459d7",
-                "shasum": ""
-            },
-            "require": {
-                "monolog/monolog": "^3.6",
-                "php": "^8.2",
-                "psr/log": "^3.0",
-                "symfony/mailer": "^7.0",
-                "twig/twig": "^3.8",
-                "vlucas/phpdotenv": "^5.6"
-            },
-            "type": "sdk",
-            "autoload": {
-                "psr-4": {
-                    "Budgetcontrol\\SdkMailer\\": "src/"
-                }
-            },
-            "authors": [
-                {
-                    "name": "Marco De Felice",
-                    "email": "marco.defelice@budgetcontrol.cloud"
-                }
-            ],
-            "description": "Budget control SDK package mailer",
-            "support": {
-                "source": "https://github.com/BudgetControl/Libs_Mailer/tree/v1.1",
-                "issues": "https://github.com/BudgetControl/Libs_Mailer/issues"
-            },
-            "time": "2024-05-13T10:14:32+00:00"
         },
         {
             "name": "cakephp/chronos",
@@ -1751,6 +1710,47 @@
                 }
             ],
             "time": "2024-03-14T07:50:32+00:00"
+        },
+        {
+            "name": "mlabfactory/libs-mailer",
+            "version": "v1.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mlabfactory/Libs_Mailer.git",
+                "reference": "f335aca321768704062a8fd632e2ad57536d7363"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mlabfactory/Libs_Mailer/zipball/f335aca321768704062a8fd632e2ad57536d7363",
+                "reference": "f335aca321768704062a8fd632e2ad57536d7363",
+                "shasum": ""
+            },
+            "require": {
+                "monolog/monolog": "^3.6",
+                "php": "^8.2",
+                "psr/log": "^3.0",
+                "symfony/mailer": "^7.0",
+                "twig/twig": "^3.8",
+                "vlucas/phpdotenv": "^5.6"
+            },
+            "type": "sdk",
+            "autoload": {
+                "psr-4": {
+                    "MLAB\\SdkMailer\\": "src/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Marco De Felice",
+                    "email": "tech@mlabfactory.it"
+                }
+            ],
+            "description": "Budget control SDK package mailer",
+            "support": {
+                "source": "https://github.com/mlabfactory/Libs_Mailer/tree/v1.1.4",
+                "issues": "https://github.com/mlabfactory/Libs_Mailer/issues"
+            },
+            "time": "2024-05-23T17:02:57+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -7346,5 +7346,5 @@
         "php": "^8.1"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
