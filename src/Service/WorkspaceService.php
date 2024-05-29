@@ -2,7 +2,7 @@
 
 namespace Budgetcontrol\Workspace\Service;
 
-use Budgetcontrol\SdkMailer\View\Mail as ViewMail;
+use MLAB\SdkMailer\View\Mail as ViewMail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Budgetcontrol\Workspace\Domain\Model\User;

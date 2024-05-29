@@ -2,13 +2,13 @@
 namespace Budgetcontrol\Workspace\Facade;
 
 use Illuminate\Support\Facades\Facade;
-use Budgetcontrol\SdkMailer\Service\Mail as BaseMail;
+use MLAB\SdkMailer\Service\Mail as MailService;
 
 /**
  * Class Mail
  *
  * This class is a facade for the Mail class.
- * @see Budgetcontrol\SdkMailer\Service\Mail
+ * @see MLAB\SdkMailer\Service\Mail
  */
 
 class Mail extends Facade
