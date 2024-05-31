@@ -26,7 +26,8 @@
         "illuminate/events": "^11.0",
         "symfony/property-access": "^7.0",
         "illuminate/filesystem": "^11.0",
-        "mlabfactory/libs-mailer": "v1.1.4"
+        "mlabfactory/libs-mailer": "v1.1.4",
+        "logtail/monolog-logtail": "dev-master"
     },
     "require-dev": {
         "nikic/php-parser": "^5.0",
