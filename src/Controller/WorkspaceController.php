@@ -121,7 +121,9 @@ class WorkspaceController
             $wsId = $toInsert->getWorkspace()->uuid;
 
             $service = new WorkspaceService($arg['userId'], $wsId);
-            $service->shareWith($params['shareWith']);
+            if(!empty($params['shareWith'])) {
+                $service->shareWith($params['shareWith']);
+            }
         } catch (Throwable $e) {
             return response(["error" => $e->getMessage()], 500);
         }
@@ -152,7 +154,9 @@ class WorkspaceController
             $workspace->save();
 
             $service = new WorkspaceService($arg['userId'], $arg['wsId']);
-            $service->shareWith($requestBody['shareWith']);
+            if(!empty($requestBody['shareWith'])) {
+                $service->shareWith($requestBody['shareWith']);
+            }
 
             $toUpdate = Workspace::byUuid($arg['wsId'])->first();
         } catch (Throwable $e) {
