@@ -27,7 +27,7 @@
         "symfony/property-access": "^7.0",
         "illuminate/filesystem": "^11.0",
         "mlabfactory/libs-mailer": "v1.1.4",
-        "logtail/monolog-logtail": "dev-master"
+        "logtail/monolog-logtail": "^3.1"
     },
     "require-dev": {
         "nikic/php-parser": "^5.0",
@@ -48,5 +48,5 @@
             "email": "marco.defelice@mlabfactory.it"
         }
     ],
-    "minimum-stability": "dev"
+    "minimum-stability": "stable"
 }

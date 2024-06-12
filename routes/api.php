@@ -13,3 +13,4 @@ $app->delete('/{userId}/{wsId}/delete', '\Budgetcontrol\Workspace\Controller\Wor
 $app->patch('/{userId}/{wsId}/activate', '\Budgetcontrol\Workspace\Controller\WorkspaceController:activate');
 $app->post('/{userId}/{wsId}/share', '\Budgetcontrol\Workspace\Controller\WorkspaceController:share');
 
+$app->get('/monitor', '\Budgetcontrol\Workspace\Controller\Controller:monitor');
