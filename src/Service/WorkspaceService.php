@@ -69,9 +69,9 @@ class WorkspaceService
         Log::info("Create new Wallet entry");
         Capsule::statement('
             INSERT INTO wallets
-            (uuid,date_time,name,color,type,balance,installementValue,currency,exclude_from_stats,workspace_id)
+            (uuid,name,color,type,balance,installementValue,currency,exclude_from_stats,workspace_id)
             VALUES
-            ("' . $uuid . '","' . $dateTIme . '","Cash","#C6C6C6","Cash",0,0,"EUR",0,'.$wsId.')
+            ("' . $uuid . '","Cash","#C6C6C6","Cash",0,0,"EUR",0,'.$wsId.')
         ');
 
         // 3) setup default settings
