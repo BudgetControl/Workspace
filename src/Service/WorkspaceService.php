@@ -66,9 +66,9 @@ class WorkspaceService
         // 2) create new wallet
         $uuid = \Ramsey\Uuid\Uuid::uuid4()->toString();
         $dateTIme = date("Y-m-d H:i:s", time());
-        Log::info("Create new Account entry");
+        Log::info("Create new Wallet entry");
         Capsule::statement('
-            INSERT INTO accounts
+            INSERT INTO wallets
             (uuid,date_time,name,color,type,balance,installementValue,currency,exclude_from_stats,workspace_id)
             VALUES
             ("' . $uuid . '","' . $dateTIme . '","Cash","#C6C6C6","Cash",0,0,"EUR",0,'.$wsId.')
