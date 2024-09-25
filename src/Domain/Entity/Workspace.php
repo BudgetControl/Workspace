@@ -1,9 +1,9 @@
 <?php
 namespace Budgetcontrol\Workspace\Domain\Entity;
 
-use Budgetcontrol\Workspace\Domain\Model\Workspace as ModelWorkspace;
 use Budgetcontrol\Workspace\Service\Traits\Serializer;
-use Budgetcontrol\Workspace\Domain\Model\User;
+use Budgetcontrol\Library\Model\Workspace as ModelWorkspace;
+use Budgetcontrol\Library\Model\User;
 use Budgetcontrol\Workspace\Domain\Model\WorkspaceSettings;
 /**
  * 

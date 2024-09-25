@@ -2,15 +2,17 @@
 
 namespace Budgetcontrol\Workspace\Service;
 
-use MLAB\SdkMailer\View\Mail as ViewMail;
+use Budgetcontrol\Library\Entity\Wallet as EntityWallet;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Database\Capsule\Manager as Capsule;
-use Budgetcontrol\Workspace\Domain\Model\User;
-use Budgetcontrol\Workspace\Domain\Model\WorkspaceSettings;
-use Budgetcontrol\Workspace\Domain\Entity\Workspace;
-use Budgetcontrol\Workspace\Exceptions\WorkspaceException;
-use Budgetcontrol\Workspace\Domain\Model\Workspace as ModelWorkspace;
 use Budgetcontrol\Workspace\Facade\Mail;
+use Illuminate\Database\Capsule\Manager as Capsule;
+use Budgetcontrol\Workspace\Domain\Entity\Workspace;
+use BudgetcontrolLibs\Mailer\View\ShareWorkspaceView;
+use Budgetcontrol\Workspace\Exceptions\WorkspaceException;
+use Budgetcontrol\Workspace\Domain\Model\WorkspaceSettings;
+use Budgetcontrol\Library\Model\Workspace as ModelWorkspace;
+use Budgetcontrol\Library\Model\User;
+use Budgetcontrol\Library\Model\Wallet;
 
 /**
  * Represents a service for managing workspaces.
@@ -65,14 +67,19 @@ class WorkspaceService
 
         // 2) create new wallet
         $uuid = \Ramsey\Uuid\Uuid::uuid4()->toString();
-        $dateTIme = date("Y-m-d H:i:s", time());
         Log::info("Create new Wallet entry");
-        Capsule::statement('
-            INSERT INTO wallets
-            (uuid,name,color,type,balance,installement_value,currency,exclude_from_stats,workspace_id)
-            VALUES
-            ("' . $uuid . '","Cash","#C6C6C6","Cash",0,0,"EUR",0,'.$wsId.')
-        ');
+
+        $wallet = new Wallet();
+        $wallet->uuid = $uuid;
+        $wallet->name = "Cash";
+        $wallet->color = "#C6C6C6";
+        $wallet->type = EntityWallet::cache->value;
+        $wallet->balance = 0;
+        $wallet->installement_value = 0;
+        $wallet->currency = "EUR";
+        $wallet->exclude_from_stats = 0;
+        $wallet->workspace_id = $wsId;
+        $wallet->save();
 
         // 3) setup default settings
         Log::info("Set up default settings");
@@ -195,6 +202,12 @@ class WorkspaceService
         $ws->users()->attach($user);
     }
 
+    /**
+     * Share the workspace with the specified users.
+     *
+     * @param array $usersToShare An array of users to share the workspace with.
+     * @return void
+     */
     public function shareWith(array $usersToShare): void
     {
         //first remove all relations
@@ -212,11 +225,15 @@ class WorkspaceService
             $this->workspace->getWorkspace()->users()->attach($userFound);
 
             try{
-                $emailView = new ViewMail();
-                $emailView->setData([
-                    'message' => $this->workspace->getUser()->name." has just shared his Wallet (".$this->workspace->getWorkspace()->name.") with you. Access Budget Control to view it",
-                ]);
-                Mail::sendMail($user['email'], 'Workspace shared', $emailView);
+                $emailView = new ShareWorkspaceView();
+                $emailView->setUserEmail($userFound->email);
+                $emailView->setUserName($userFound->name);
+                $emailView->setWorkspaceName($this->workspace->getWorkspace()->name);
+                $emailView->setUserFrom($this->workspace->getUser()->name);
+                $subject = $this->workspace->getUser()->name." has just shared his Wallet (".$this->workspace->getWorkspace()->name.") with you. Access Budget Control to view it";
+                
+                Mail::send($userFound->email, $subject, $emailView);
+
             } catch (\Throwable $e) {
                 Log::error("Error sharing workspace, could not send email: " . $e->getMessage());
             }
