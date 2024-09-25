@@ -59,7 +59,7 @@
         "symfony/property-access": "^7.0",
         "illuminate/filesystem": "^11.0",
         "logtail/monolog-logtail": "^3.1",
-        "budgetcontrol/mailer": "^v0.1",
+        "budgetcontrol/mailer": "^v0.2",
         "budgetcontrol/library": "^v1.1",
         "budgetcontrol/schema-registry-service": "v1.0-beta",
         "budgetcontrol/cryptable": "^v0.1"
