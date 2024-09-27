@@ -146,6 +146,8 @@ class WorkspaceController
             return response(["error" => "No workspaces found"], 404);
         }
 
+        $params = $request->getParsedBody();
+
         try {
             $requestBody = $request->getParsedBody();
             $workspace = Workspace::where('uuid', $arg['wsId'])->first();

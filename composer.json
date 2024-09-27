@@ -2,12 +2,44 @@
     "name": "budgetcontrol/workspace",
     "description": "defines the dependencies required for a PHP microservice managing workspaces in a Budget application",
     "type": "none",
-    "repositories": {
-        "mlabfactory/libs-mailer": {
+    "repositories": [
+        {
             "type": "vcs",
-            "url": "https://github.com/Mlabfactory/Libs_Mailer.git"
+            "url": "https://github.com/mlabfactory/Libs_Mailer.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/BudgetControl/Libs_BcConnector.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/MaliRobot/aws-cognito.git"
+        },
+        {
+            "type":"vcs",
+            "url":"git@github.com:BudgetControl/MailerService.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/mlabfactory/phpunit-self-api-integration.git"
+        },
+        {
+            "type":"vcs",
+            "url":"https://github.com/BudgetControl/Library.git"
+        },
+        {
+            "type":"vcs",
+            "url":"git@github.com:BudgetControl/SeedsTestLibs.git"
+        },
+        {
+            "type":"vcs",
+            "url":"git@github.com:BudgetControl/Schema-Registry-Service.git"
+        },
+        {
+            "type":"vcs",
+            "url":"git@github.com:BudgetControl/LibsCryptable.git"
         }
-    },
+    ],
     "require": {
         "php": "^8.1",
         "slim/slim": "^4.13",
@@ -26,13 +58,18 @@
         "illuminate/events": "^11.0",
         "symfony/property-access": "^7.0",
         "illuminate/filesystem": "^11.0",
-        "mlabfactory/libs-mailer": "v1.1.4",
-        "logtail/monolog-logtail": "^3.1"
+        "logtail/monolog-logtail": "^3.1",
+        "budgetcontrol/mailer": "^v0.2",
+        "budgetcontrol/library": "^v1.2",
+        "budgetcontrol/schema-registry-service": "v1.0-beta",
+        "budgetcontrol/cryptable": "^v0.1"
     },
     "require-dev": {
         "nikic/php-parser": "^5.0",
         "phpunit/phpunit": "^11.0",
-        "fakerphp/faker": "^1.23"
+        "fakerphp/faker": "^1.23",
+        "budgetcontrol/seeds": "^v0.2",
+        "mlabfactory/phpunit-self-api-integration": "^v1.1-beta"
     },
     "autoload": {
         "psr-4": {
