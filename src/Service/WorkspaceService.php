@@ -9,10 +9,11 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 use Budgetcontrol\Workspace\Domain\Entity\Workspace;
 use BudgetcontrolLibs\Mailer\View\ShareWorkspaceView;
 use Budgetcontrol\Workspace\Exceptions\WorkspaceException;
-use Budgetcontrol\Workspace\Domain\Model\WorkspaceSettings;
 use Budgetcontrol\Library\Model\Workspace as ModelWorkspace;
 use Budgetcontrol\Library\Model\User;
 use Budgetcontrol\Library\Model\Wallet;
+use Budgetcontrol\Library\ValueObject\WorkspaceSetting;
+use Budgetcontrol\Workspace\Domain\Model\WorkspaceSettings;
 
 /**
  * Represents a service for managing workspaces.
@@ -22,7 +23,9 @@ class WorkspaceService
     private Workspace $workspace;
     private int $userId;
 
-    CONST CONFIGURATION = 'app_configurations';
+    const CONFIGURATION = 'app_configurations';
+    const DEFAULT_CURRENCY = 2;
+    const DEFAULT_PAYMENT_TYPE = 1;
 
     public function __construct(int $userId, string $uuid = null)
     {   
@@ -71,25 +74,26 @@ class WorkspaceService
 
         $wallet = new Wallet();
         $wallet->uuid = $uuid;
-        $wallet->name = "Cash";
-        $wallet->color = "#C6C6C6";
+        $wallet->name = EntityWallet::cache->value;
+        $randomColor = '#' . substr(md5(rand()), 0, 6);
+        $wallet->color = $randomColor;
         $wallet->type = EntityWallet::cache->value;
         $wallet->balance = 0;
         $wallet->installement_value = 0;
-        $wallet->currency = "EUR";
+        $wallet->currency = self::DEFAULT_CURRENCY;
         $wallet->exclude_from_stats = 0;
         $wallet->workspace_id = $wsId;
         $wallet->save();
+
+        $workspaceSettings = WorkspaceSetting::create(self::DEFAULT_CURRENCY, self::DEFAULT_PAYMENT_TYPE);
 
         // 3) setup default settings
         Log::info("Set up default settings");
         $configurations = self::CONFIGURATION;
         $wsSettings = new WorkspaceSettings();
         $wsSettings->setting = $configurations;
-        $wsSettings->data = json_encode([
-            "currency_id" => 1,
-            "payment_type_id" => 1
-        ]);
+        $wsSettings->data = $workspaceSettings;
+
         $wsSettings->workspace_id = $wsId;
         $wsSettings->save();
 
