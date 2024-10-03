@@ -2,11 +2,13 @@
 
 namespace Budgetcontrol\Workspace\Controller;
 
+use Budgetcontrol\Library\Model\WorkspaceSettings;
 use Budgetcontrol\Workspace\Domain\Model\User;
 use Budgetcontrol\Workspace\Domain\Model\Workspace;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Budgetcontrol\Workspace\Service\WorkspaceService;
+use Budgetcontrol\Library\ValueObject\WorkspaceSetting;
 use Throwable;
 
 /**
@@ -159,6 +161,12 @@ class WorkspaceController
             if(isset($params['shareWith']) && !empty($params['shareWith'])) {
                 $service->shareWith($params['shareWith']);
             }
+
+            // Update workspace setting
+            $workspaceSettings = WorkspaceSetting::create($params['currency'], $params['payment_type']);
+            $settings = WorkspaceSettings::where('workspace_id', $workspace->id)->first();
+            $settings->setting = $workspaceSettings;
+            $settings->save();
 
             $toUpdate = Workspace::byUuid($arg['wsId'])->first();
         } catch (Throwable $e) {
