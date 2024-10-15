@@ -12,7 +12,7 @@ permissions:
 jobs:
   deploy_job:
     runs-on: ubuntu-latest
-    environment: prod
+    environment: dev
     name: deploy
     steps:
         - name: Checkout
