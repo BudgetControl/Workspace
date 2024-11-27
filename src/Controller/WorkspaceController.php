@@ -164,7 +164,7 @@ class WorkspaceController
             }
 
             // Update workspace setting
-            $currency = Currency::find($params['currency']);
+            $currency = Currency::where('id',$params['currency'])->get();
             $workspaceSettings = WorkspaceSetting::create($currency, $params['payment_type']);
             $settings = WorkspaceSettings::where('workspace_id', $workspace->id)->first();
             $settings->setting = $workspaceSettings;

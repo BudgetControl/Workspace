@@ -86,7 +86,7 @@ class WorkspaceService
         $wallet->workspace_id = $wsId;
         $wallet->save();
 
-        $defaultCurrency = Currency::find(self::DEFAULT_CURRENCY);
+        $defaultCurrency = Currency::where('id',self::DEFAULT_CURRENCY)->get();
         $workspaceSettings = WorkspaceSetting::create($defaultCurrency, self::DEFAULT_PAYMENT_TYPE);
 
         // 3) setup default settings

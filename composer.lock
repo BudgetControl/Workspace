@@ -113,16 +113,16 @@
         },
         {
             "name": "budgetcontrol/library",
-            "version": "v1.2.4",
+            "version": "v1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BudgetControl/Library.git",
-                "reference": "da913251a8950ec9a4e1bb3e73462a7e084da8ea"
+                "reference": "d5e759203a074a97a29d1f4a9523f06d45dc42d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BudgetControl/Library/zipball/da913251a8950ec9a4e1bb3e73462a7e084da8ea",
-                "reference": "da913251a8950ec9a4e1bb3e73462a7e084da8ea",
+                "url": "https://api.github.com/repos/BudgetControl/Library/zipball/d5e759203a074a97a29d1f4a9523f06d45dc42d0",
+                "reference": "d5e759203a074a97a29d1f4a9523f06d45dc42d0",
                 "shasum": ""
             },
             "require": {
@@ -144,9 +144,9 @@
                 }
             ],
             "support": {
-                "source": "https://github.com/BudgetControl/Library/tree/v1.2.4"
+                "source": "https://github.com/BudgetControl/Library/tree/v1.3.1"
             },
-            "time": "2024-10-03T07:51:25+00:00"
+            "time": "2024-11-27T16:57:28+00:00"
         },
         {
             "name": "budgetcontrol/mailer",
@@ -8010,6 +8010,6 @@
     "platform": {
         "php": "^8.1"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
 }
