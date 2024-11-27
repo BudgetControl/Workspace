@@ -3,6 +3,7 @@
 namespace Budgetcontrol\Workspace\Service;
 
 use Budgetcontrol\Library\Entity\Wallet as EntityWallet;
+use Budgetcontrol\Library\Model\Currency;
 use Illuminate\Support\Facades\Log;
 use Budgetcontrol\Workspace\Facade\Mail;
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -85,7 +86,8 @@ class WorkspaceService
         $wallet->workspace_id = $wsId;
         $wallet->save();
 
-        $workspaceSettings = WorkspaceSetting::create(self::DEFAULT_CURRENCY, self::DEFAULT_PAYMENT_TYPE);
+        $defaultCurrency = Currency::find(self::DEFAULT_CURRENCY);
+        $workspaceSettings = WorkspaceSetting::create($defaultCurrency, self::DEFAULT_PAYMENT_TYPE);
 
         // 3) setup default settings
         Log::info("Set up default settings");

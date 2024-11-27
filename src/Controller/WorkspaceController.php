@@ -2,14 +2,15 @@
 
 namespace Budgetcontrol\Workspace\Controller;
 
-use Budgetcontrol\Library\Model\WorkspaceSettings;
+use Throwable;
+use Budgetcontrol\Library\Model\Currency;
 use Budgetcontrol\Workspace\Domain\Model\User;
+use Budgetcontrol\Library\Model\WorkspaceSettings;
 use Budgetcontrol\Workspace\Domain\Model\Workspace;
 use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Budgetcontrol\Workspace\Service\WorkspaceService;
 use Budgetcontrol\Library\ValueObject\WorkspaceSetting;
-use Throwable;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 /**
  * Class WorkspaceController
@@ -163,7 +164,8 @@ class WorkspaceController
             }
 
             // Update workspace setting
-            $workspaceSettings = WorkspaceSetting::create($params['currency'], $params['payment_type']);
+            $currency = Currency::find($params['currency']);
+            $workspaceSettings = WorkspaceSetting::create($currency, $params['payment_type']);
             $settings = WorkspaceSettings::where('workspace_id', $workspace->id)->first();
             $settings->setting = $workspaceSettings;
             $settings->save();
