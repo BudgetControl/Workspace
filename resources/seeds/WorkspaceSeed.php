@@ -28,7 +28,7 @@ class WorkspaceSeed extends AbstractSeed
         DB::table('workspace_settings')->insert([
             'workspace_id' => 2,
             'setting' => 'app_configurations',
-            'data' => '{"currency_id": 1, "payment_type_id": 1}',
+            'data' => '{"currency": {"name": "euro", "symbol":"€","id":1}, "payment_type_id": 1}',
         ]);
     }
 }
