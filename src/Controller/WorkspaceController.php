@@ -213,4 +213,24 @@ class WorkspaceController
         WorkspaceService::shareWorkspace($wsId, $user->first());
         return response([], 201);
     }
+
+    /**
+     * Deletes a workspace.
+     *
+     * @param Request $request The HTTP request object.
+     * @param Response $response The HTTP response object.
+     * @param mixed $arg Additional arguments.
+     * @return Response The HTTP response object after deletion.
+     */
+    public function delete(Request $request, Response $response, $arg): Response
+    {
+        $wsId = $arg['wsId'];
+        $workspace = Workspace::where('uuid', $wsId)->first();
+        if (empty($workspace)) {
+            return response(["error" => "No workspaces found"], 404);
+        }
+
+        $workspace->delete();
+        return response([], 201);
+    }
 }
