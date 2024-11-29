@@ -225,7 +225,6 @@ class WorkspaceController
     public function delete(Request $request, Response $response, $arg): Response
     {
         $wsId = $arg['wsId'];
-        $userId = $arg['userId'];
         $workspace = Workspace::where('uuid', $wsId)->first();
         if (empty($workspace)) {
             return response(["error" => "No workspaces found"], 404);
