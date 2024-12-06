@@ -173,7 +173,7 @@ class WorkspaceController
                 $settings->workspace_id = $workspace->id;
             }
 
-            $settings->setting = $workspaceSettings;
+            $settings->data = $workspaceSettings;
             $settings->save();
 
             $toUpdate = Workspace::byUuid($arg['wsId'])->first();
