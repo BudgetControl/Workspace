@@ -167,7 +167,13 @@ class WorkspaceController
             $currency = Currency::find($params['currency']);
             $workspaceSettings = WorkspaceSetting::create($currency, $params['payment_type']);
             $settings = WorkspaceSettings::where('workspace_id', $workspace->id)->first();
-            $settings->setting = $workspaceSettings;
+
+            if(empty($settings)) {
+                $settings = new WorkspaceSettings();
+                $settings->workspace_id = $workspace->id;
+            }
+
+            $settings->data = $workspaceSettings;
             $settings->save();
 
             $toUpdate = Workspace::byUuid($arg['wsId'])->first();
