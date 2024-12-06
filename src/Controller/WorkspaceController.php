@@ -170,6 +170,7 @@ class WorkspaceController
 
             if(empty($settings)) {
                 $settings = new WorkspaceSettings();
+                $settings->workspace_id = $workspace->id;
             }
 
             $settings->setting = $workspaceSettings;
