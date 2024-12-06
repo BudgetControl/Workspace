@@ -14,11 +14,11 @@ use Budgetcontrol\Workspace\Domain\Model\WorkspaceSettings;
     use Serializer;
 
     private readonly ModelWorkspace $workspace;
-    private readonly WorkspaceSettings $settings;
+    private readonly ?WorkspaceSettings $settings;
     private readonly User $user;
     private readonly string $hash;
 
-    public function __construct(ModelWorkspace $ws, WorkspaceSettings $settings, User $user)
+    public function __construct(ModelWorkspace $ws, ?WorkspaceSettings $settings, User $user)
     {
         $ws->update(
             ['updated_at' => date('Y-m-d H:i:s', time())]
@@ -63,10 +63,22 @@ use Budgetcontrol\Workspace\Domain\Model\WorkspaceSettings;
 
     /**
      * Get the value of settings
-     * @return WorkspaceSettings
+     * @return ?WorkspaceSettings
      */
-    public function getSettings(): WorkspaceSettings
+    public function getSettings(): ?WorkspaceSettings
     {
         return $this->settings;
+    }
+
+
+    /**
+     * Set the value of settings
+     * @param WorkspaceSettings $settings
+     */
+    public function setSettings(WorkspaceSettings $settings): self
+    {
+        $this->settings = $settings;
+
+        return $this;
     }
  }
