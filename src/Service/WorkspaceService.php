@@ -147,10 +147,11 @@ class WorkspaceService
     public static function getWorkspacesList(int $userId): array
     {
         $ws = Capsule::select("
-        SELECT w.uuid, w.name, w.updated_at FROM workspaces as w
-        inner join workspaces_users_mm as ws on ws.workspace_id = w.id
-        where ws.user_id = $userId and w.deleted_at is null
-        order by w.updated_at desc;
+        SELECT DISTINCT w.uuid, w.name, w.updated_at 
+        FROM workspaces AS w
+        LEFT JOIN workspaces_users_mm AS ws ON ws.workspace_id = w.id
+        WHERE ws.user_id = $userId AND w.deleted_at IS NULL
+        ORDER BY w.updated_at DESC;
         ");
 
         return $ws;
