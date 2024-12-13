@@ -1,0 +1,46 @@
+{
+    "workspace": {
+        "id": 1,
+        "uuid": "06eb6559-6f01-4a9d-9429-d5c2f5bc9856",
+        "name": "test",
+        "description": "test",
+        "current": false,
+        "created_at": "2024-12-13T13:28:42.000000Z",
+        "updated_at": "2024-12-13T13:28:42.000000Z",
+        "deleted_at": null,
+        "user_id": 1
+    },
+    "settings": {
+        "id": 1,
+        "workspace_id": 1,
+        "setting": "app_configurations",
+        "data": {
+            "currency": {
+                "id": 1,
+                "created_at": "2024-12-13T13:28:42.000000Z",
+                "updated_at": "2024-12-13T13:28:42.000000Z",
+                "name": "United States Dollar",
+                "deleted_at": null,
+                "label": "USD",
+                "icon": "$",
+                "exchange_rate": null,
+                "slug": "united_states_dollar"
+            },
+            "paymenttypeId": 1
+        },
+        "created_at": "2024-12-13T13:28:43.613930Z",
+        "updated_at": "2024-12-13T13:28:43.613930Z",
+        "deleted_at": null
+    },
+    "user": {
+        "uuid": "2a2ec6ab-e2d1-4484-909c-7937bdbd6679",
+        "name": "Mario",
+        "email": "mario.rossi@email.it",
+        "email_verified_at": null,
+        "created_at": "2024-12-13T13:28:42.000000Z",
+        "updated_at": "2024-12-13T13:28:42.000000Z",
+        "deleted_at": null,
+        "sub": null
+    },
+    "hash": "f343d7d8-3ccf-4f0d-9da7-2c5966c2e3bd"
+}

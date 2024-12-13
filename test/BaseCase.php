@@ -1,13 +1,13 @@
 <?php
 namespace Budgetcontrol\Test;
 
-use Budgetcontrol\Authentication\Facade\Crypt;
-use Budgetcontrol\Test\Libs\Cache;
-use Budgetcontrol\Test\Libs\ClientMail;
 use Illuminate\Support\Facades\Facade;
+use Budgetcontrol\Test\Libs\ClientMail;
+use Budgetcontrol\Workspace\Controller\WorkspaceController;
 
 class BaseCase extends \PHPUnit\Framework\TestCase
 {
+    protected $controller;
 
     public static function setUpBeforeClass(): void
     {
@@ -18,7 +18,7 @@ class BaseCase extends \PHPUnit\Framework\TestCase
 
     protected function setup(): void
     {
-
+        $this->controller = new WorkspaceController();
         // Set up the Facade application
         Facade::setFacadeApplication([
             'log' => new \Monolog\Logger('test'),

@@ -15,6 +15,7 @@ use Budgetcontrol\Library\Model\User;
 use Budgetcontrol\Library\Model\Wallet;
 use Budgetcontrol\Library\ValueObject\WorkspaceSetting;
 use Budgetcontrol\Workspace\Domain\Model\WorkspaceSettings;
+use Budgetcontrol\Workspace\Domain\Repository\WorkspaceRepository;
 
 /**
  * Represents a service for managing workspaces.
@@ -23,6 +24,7 @@ class WorkspaceService
 {
     private Workspace $workspace;
     private int $userId;
+    protected WorkspaceRepository $repository;
 
     const CONFIGURATION = 'app_configurations';
     const DEFAULT_CURRENCY = 2;
@@ -31,14 +33,22 @@ class WorkspaceService
     public function __construct(int $userId, string $uuid = null)
     {   
         $this->userId = $userId;
+        $this->repository = new WorkspaceRepository();
+
         if(empty($uuid)) {
             $this->workspace = self::getLastWorkspace($userId);
         }else{
+
+            $workspace = $this->repository->getWorkspaceWithUsers($uuid);
+            $workspaceSettings = $this->repository->getWorkspaceSettigs($workspace);
+            $user = User::find($userId);
+
             $this->workspace = new Workspace(
-                ModelWorkspace::where('uuid', $uuid)->with('users')->first(),
-                WorkspaceSettings::where('workspace_id', ModelWorkspace::where('uuid', $uuid)->first()->id)->first(),
-                User::find($userId)
+                $workspace,
+                $workspaceSettings,
+                $user
             );
+
         }
     }
 
@@ -120,11 +130,11 @@ class WorkspaceService
     public static function getLastWorkspace(int $userId): Workspace
     {
         $ws = Capsule::select("
-        SELECT workspaces.id as wsid FROM workspaces as w
-        inner join workspaces_users as ws on ws.workspace_id = workspaces.id
+        SELECT w.id as wsid FROM workspaces as w
+        inner join workspaces_users_mm as ws on ws.workspace_id = w.id
         left join users on ws.workspace_id = users.id
         where workspace_id = $userId and w.user_id = $userId
-        order by workspaces.updated_at desc
+        order by w.updated_at desc
         limit 1;
         ");
 
@@ -212,7 +222,7 @@ class WorkspaceService
     /**
      * Share the workspace with the specified users.
      *
-     * @param array $usersToShare An array of users to share the workspace with.
+     * @param array $usersToShare An array of users uuid to share the workspace with.
      * @return void
      */
     public function shareWith(array $usersToShare): void
@@ -224,7 +234,7 @@ class WorkspaceService
         $this->workspace->getWorkspace()->users()->attach($this->workspace->getUser());
 
         foreach($usersToShare as $user) {
-            $userFound = User::where('uuid', $user['uuid'])->first();
+            $userFound = User::where('uuid', $user)->first();
             if(empty($userFound)) {
                 Log::error("No user found with id: " . $userFound);
             }

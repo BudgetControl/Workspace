@@ -17,7 +17,9 @@ $capsule = new \Illuminate\Database\Capsule\Manager();
 
 // Aggiungi la configurazione del database al Capsule
 $connections = require_once __DIR__.'/../config/database.php';
-$capsule->addConnection($connections['mysql']);
+
+$dbConnection = env('DB_CONNECTION');;
+$capsule->addConnection($connections[$dbConnection]);
 
 // Esegui il boot del Capsule
 $capsule->bootEloquent();
