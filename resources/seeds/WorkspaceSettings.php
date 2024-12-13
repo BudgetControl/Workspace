@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Budgetcontrol\Library\Model\Currency;
+use Budgetcontrol\Library\ValueObject\WorkspaceSetting;
 use Budgetcontrol\Workspace\Domain\Model\User;
 use Phinx\Seed\AbstractSeed;
 use Budgetcontrol\Workspace\Domain\Model\WorkspaceSettings as Model;
@@ -20,15 +22,7 @@ class WorkspaceSettings extends AbstractSeed
     {
         $workspace = new Model();
         $workspace->workspace_id = 1;
-        $workspace->setting = 'app_configurations';
-        $workspace->data = json_encode([
-            "currency_id" => 1,
-            "payment_type_id" => 1
-        ]);
+        $workspace->data = WorkspaceSetting::create(Currency::find(1), 1);
         $workspace->save();
-
-        $user = User::find(1);
-        $user->workspaces()->attach($workspace->id);
-
     }
 }

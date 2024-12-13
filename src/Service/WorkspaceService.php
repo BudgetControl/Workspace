@@ -130,11 +130,11 @@ class WorkspaceService
     public static function getLastWorkspace(int $userId): Workspace
     {
         $ws = Capsule::select("
-        SELECT workspaces.id as wsid FROM workspaces as w
-        inner join workspaces_users as ws on ws.workspace_id = workspaces.id
+        SELECT w.id as wsid FROM workspaces as w
+        inner join workspaces_users_mm as ws on ws.workspace_id = w.id
         left join users on ws.workspace_id = users.id
         where workspace_id = $userId and w.user_id = $userId
-        order by workspaces.updated_at desc
+        order by w.updated_at desc
         limit 1;
         ");
 
@@ -222,7 +222,7 @@ class WorkspaceService
     /**
      * Share the workspace with the specified users.
      *
-     * @param array $usersToShare An array of users to share the workspace with.
+     * @param array $usersToShare An array of users uuid to share the workspace with.
      * @return void
      */
     public function shareWith(array $usersToShare): void
@@ -234,7 +234,7 @@ class WorkspaceService
         $this->workspace->getWorkspace()->users()->attach($this->workspace->getUser());
 
         foreach($usersToShare as $user) {
-            $userFound = User::where('uuid', $user['uuid'])->first();
+            $userFound = User::where('uuid', $user)->first();
             if(empty($userFound)) {
                 Log::error("No user found with id: " . $userFound);
             }

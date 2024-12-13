@@ -30,3 +30,5 @@
 .vscode/
 .DS_store
 .log
+.phpunit.cache
+test/assertions/*.txt
