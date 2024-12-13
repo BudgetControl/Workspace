@@ -15,6 +15,7 @@ use Budgetcontrol\Library\Model\User;
 use Budgetcontrol\Library\Model\Wallet;
 use Budgetcontrol\Library\ValueObject\WorkspaceSetting;
 use Budgetcontrol\Workspace\Domain\Model\WorkspaceSettings;
+use Budgetcontrol\Workspace\Domain\Repository\WorkspaceRepository;
 
 /**
  * Represents a service for managing workspaces.
@@ -23,6 +24,7 @@ class WorkspaceService
 {
     private Workspace $workspace;
     private int $userId;
+    protected WorkspaceRepository $repository;
 
     const CONFIGURATION = 'app_configurations';
     const DEFAULT_CURRENCY = 2;
@@ -31,14 +33,22 @@ class WorkspaceService
     public function __construct(int $userId, string $uuid = null)
     {   
         $this->userId = $userId;
+        $this->repository = new WorkspaceRepository();
+
         if(empty($uuid)) {
             $this->workspace = self::getLastWorkspace($userId);
         }else{
+
+            $workspace = $this->repository->getWorkspaceWithUsers($uuid);
+            $workspaceSettings = $this->repository->getWorkspaceSettigs($workspace);
+            $user = User::find($userId);
+
             $this->workspace = new Workspace(
-                ModelWorkspace::where('uuid', $uuid)->with('users')->first(),
-                WorkspaceSettings::where('workspace_id', ModelWorkspace::where('uuid', $uuid)->first()->id)->first(),
-                User::find($userId)
+                $workspace,
+                $workspaceSettings,
+                $user
             );
+
         }
     }
 

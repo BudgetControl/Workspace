@@ -4,10 +4,7 @@ namespace Budgetcontrol\Workspace\Domain\Entity;
 use Budgetcontrol\Workspace\Service\Traits\Serializer;
 use Budgetcontrol\Library\Model\Workspace as ModelWorkspace;
 use Budgetcontrol\Library\Model\User;
-use Budgetcontrol\Workspace\Domain\Model\WorkspaceSettings;
-/**
- * 
- */
+use Budgetcontrol\Library\Model\WorkspaceSettings;
 
  final class Workspace {
 
