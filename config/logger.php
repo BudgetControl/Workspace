@@ -32,7 +32,7 @@ switch(env('APP_LOG_LEVEL','debug')) {
 }
 
 //setup log with BetterStack
-$logger = new \Monolog\Logger('MS-WORKSPACE');
+$logger = new \Monolog\Logger('MS-STATS');
 
 // log on FS
 $logPath = env('APP_LOG_PATH',__DIR__.'/../storage/logs/log-'.date("Ymd").'.log');
