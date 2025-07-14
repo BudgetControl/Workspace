@@ -63,6 +63,10 @@ class WorkspaceService
             throw new WorkspaceException("No user found", 500);
         }
 
+        if(empty($name)) {
+            throw new WorkspaceException("Workspace name is required", 500);
+        }
+
         // 1) create workspace
         Log::info("Set up default workspace");
         $workspace = new ModelWorkspace();
