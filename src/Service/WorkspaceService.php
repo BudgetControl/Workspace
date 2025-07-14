@@ -91,8 +91,7 @@ class WorkspaceService
         $wallet = new Wallet();
         $wallet->uuid = $walletData->getUuid();
         $wallet->name = $walletData->getName();
-        $randomColor = '#' . substr(md5(rand()), 0, 6);
-        $wallet->color = $randomColor;
+        $wallet->color = $walletData->getColor();
         $wallet->type = $walletData->getWalletType();
         $wallet->balance = $walletData->getBalance();
         $wallet->installement_value = 0;

@@ -25,6 +25,8 @@ use Budgetcontrol\Library\Entity\Wallet as EntityWallet;
 class WorkspaceController
 {
 
+    const DEFAULT_CURRENCY = 2;
+
     /**
      * List all workspaces.
      *
@@ -123,22 +125,22 @@ class WorkspaceController
             $userId = $arg['userId'];
             $params = $request->getParsedBody();
 
-            if (empty($params['workspace']) || empty($params['wallet'])) {
+            if (empty($params['workspace'])) {
                 return response(["error" => "Missing workspace or wallet parameters"], 400);
             }
-
+            
+            $randomColor = '#' . substr(md5(rand()), 0, 6);
             $wallet = new Wallet(
-                $params['wallet']['name'],
-                $params['wallet']['balance'],
-                EntityWallet::from($params['wallet']['type']),
-                $params['wallet']['color'],
-                $params['wallet']['currency'],
+                $params['wallet']['name'] ?? 'Default Wallet',
+                $params['wallet']['balance'] ?? 0,
+                EntityWallet::from($params['wallet']['type']) ?? EntityWallet::cache,
+                $params['wallet']['color'] ?? $randomColor,
+                $params['wallet']['currency'] ?? self::DEFAULT_CURRENCY,
                 $params['wallet']['exclude_from_stats'] ?? false
             );
 
             $workspace = new Workspace(
                 $params['workspace']['name'],
-                $params['workspace']['description'] ?? null,
                 $params['workspace']['currency'],
                 $params['workspace']['payment_type']
             );
