@@ -106,8 +106,11 @@ class WorkspaceControllerTest extends BaseCase
         $arg = ['userId' => 1];
 
         $payload = [
-            'name' => 'Test Workspace with Relations',
-            'description' => 'Test Workspace Description',
+            'workspace' => [
+                'name' => 'Test Workspace with Relations',
+                'currency' => 2,
+                'payment_type' => 1
+            ],
             'shareWith' => ['4373a9a3-a481-4d5a-b8fe-c2571be7efe3'],
         ];
 
