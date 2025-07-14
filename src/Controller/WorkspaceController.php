@@ -128,12 +128,12 @@ class WorkspaceController
             if (empty($params['workspace'])) {
                 return response(["error" => "Missing workspace or wallet parameters"], 400);
             }
-            
+
             $randomColor = '#' . substr(md5(rand()), 0, 6);
             $wallet = new Wallet(
                 $params['wallet']['name'] ?? 'Default Wallet',
                 $params['wallet']['balance'] ?? 0,
-                EntityWallet::from($params['wallet']['type']) ?? EntityWallet::cache,
+                EntityWallet::from($params['wallet']['type'] ?? 'cache'),
                 $params['wallet']['color'] ?? $randomColor,
                 $params['wallet']['currency'] ?? self::DEFAULT_CURRENCY,
                 $params['wallet']['exclude_from_stats'] ?? false
