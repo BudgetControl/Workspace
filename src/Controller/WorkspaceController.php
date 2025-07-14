@@ -2,15 +2,19 @@
 
 namespace Budgetcontrol\Workspace\Controller;
 
+use Budgetcontrol\Library\Entity\Entry;
 use Throwable;
 use Budgetcontrol\Library\Model\Currency;
 use Budgetcontrol\Workspace\Domain\Model\User;
 use Budgetcontrol\Library\Model\WorkspaceSettings;
-use Budgetcontrol\Workspace\Domain\Model\Workspace;
+use Budgetcontrol\Workspace\Domain\Model\Workspace as WorkspaceModel;
 use Psr\Http\Message\ResponseInterface as Response;
 use Budgetcontrol\Workspace\Service\WorkspaceService;
 use Budgetcontrol\Library\ValueObject\WorkspaceSetting;
+use Budgetcontrol\Workspace\ValueObjects\Wallet;
+use Budgetcontrol\Workspace\ValueObjects\Workspace;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Budgetcontrol\Library\Entity\Wallet as EntityWallet;
 
 /**
  * Class WorkspaceController
@@ -20,6 +24,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class WorkspaceController
 {
+
+    const DEFAULT_CURRENCY = 2;
 
     /**
      * List all workspaces.
@@ -93,7 +99,7 @@ class WorkspaceController
     public function get(Request $request, Response $response, $arg): Response
     {
         // check if ws exists
-        if (Workspace::where('uuid', $arg['wsId'])->count() == 0) {
+        if (WorkspaceModel::where('uuid', $arg['wsId'])->count() == 0) {
             return response(["error" => "No workspaces found"], 404);
         }
 
@@ -118,9 +124,28 @@ class WorkspaceController
         try {
             $userId = $arg['userId'];
             $params = $request->getParsedBody();
-            $wsName = $params['name'];
-            $wsDescription = $params['description'] ?? '';
-            $toInsert = WorkspaceService::createNewWorkspace($wsName, $wsDescription, $userId);
+
+            if (empty($params['workspace'])) {
+                return response(["error" => "Missing workspace or wallet parameters"], 400);
+            }
+
+            $randomColor = '#' . substr(md5(rand()), 0, 6);
+            $wallet = new Wallet(
+                $params['wallet']['name'] ?? 'Default Wallet',
+                $params['wallet']['balance'] ?? 0,
+                EntityWallet::from($params['wallet']['type'] ?? 'cache'),
+                $params['wallet']['color'] ?? $randomColor,
+                $params['wallet']['currency'] ?? self::DEFAULT_CURRENCY,
+                $params['wallet']['exclude_from_stats'] ?? false
+            );
+
+            $workspace = new Workspace(
+                $params['workspace']['name'],
+                $params['workspace']['currency'],
+                $params['workspace']['payment_type']
+            );
+
+            $toInsert = WorkspaceService::createNewWorkspace($workspace, $wallet, $userId);
             $wsId = $toInsert->getWorkspace()->uuid;
 
             $service = new WorkspaceService($arg['userId'], $wsId);
@@ -145,7 +170,7 @@ class WorkspaceController
     public function update(Request $request, Response $response, $arg): Response
     {
         // check if ws exists
-        if (Workspace::where('uuid', $arg['wsId'])->count() == 0) {
+        if (WorkspaceModel::where('uuid', $arg['wsId'])->count() == 0) {
             return response(["error" => "No workspaces found"], 404);
         }
 
@@ -153,7 +178,7 @@ class WorkspaceController
 
         try {
             $requestBody = $request->getParsedBody();
-            $workspace = Workspace::where('uuid', $arg['wsId'])->first();
+            $workspace = WorkspaceModel::where('uuid', $arg['wsId'])->first();
             $workspace->name = $requestBody['name'];
             $workspace->description = $requestBody['description'] ?? null;
             $workspace->save();
@@ -176,7 +201,7 @@ class WorkspaceController
             $settings->data = $workspaceSettings;
             $settings->save();
 
-            $toUpdate = Workspace::byUuid($arg['wsId'])->first();
+            $toUpdate = WorkspaceModel::byUuid($arg['wsId'])->first();
         } catch (Throwable $e) {
             return response(["error" => $e->getMessage()], 500);
         }
@@ -196,7 +221,7 @@ class WorkspaceController
     {
         $wsId = $arg['wsId'];
         $userId = $arg['userId'];
-        if (Workspace::where('uuid', $wsId)->count() == 0) {
+        if (WorkspaceModel::where('uuid', $wsId)->count() == 0) {
             return response(["error" => "No workspaces found"], 404);
         }
 
@@ -231,7 +256,7 @@ class WorkspaceController
     public function delete(Request $request, Response $response, $arg): Response
     {
         $wsId = $arg['wsId'];
-        $workspace = Workspace::where('uuid', $wsId)->first();
+        $workspace = WorkspaceModel::where('uuid', $wsId)->first();
         if (empty($workspace)) {
             return response(["error" => "No workspaces found"], 404);
         }

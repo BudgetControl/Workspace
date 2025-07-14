@@ -2,8 +2,8 @@ name: PHP Composer
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ "develop" ]
+  # push:
+  #   branches: [ "develop" ]
 
 permissions:
   contents: read

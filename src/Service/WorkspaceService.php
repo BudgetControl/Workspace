@@ -16,6 +16,8 @@ use Budgetcontrol\Library\Model\Wallet;
 use Budgetcontrol\Library\ValueObject\WorkspaceSetting;
 use Budgetcontrol\Workspace\Domain\Model\WorkspaceSettings;
 use Budgetcontrol\Workspace\Domain\Repository\WorkspaceRepository;
+use Budgetcontrol\Workspace\ValueObjects\Wallet as ValueObjectsWallet;
+use Budgetcontrol\Workspace\ValueObjects\Workspace as ValueObjectsWorkspace;
 
 /**
  * Represents a service for managing workspaces.
@@ -56,20 +58,24 @@ class WorkspaceService
      * create workspace
      * when user create a new Workspaces he must create a Wallet and setup the default user settings
      */
-    public static function createNewWorkspace(string $name, string $wsDescription, int $userId): Workspace
+    public static function createNewWorkspace(ValueObjectsWorkspace $workspaceData, ValueObjectsWallet $walletData, int $userId): Workspace
     {
         //check if user id is valid
         if(empty(User::find($userId))) {
             throw new WorkspaceException("No user found", 500);
         }
 
+        if(empty($workspaceData->getName())) {
+            throw new WorkspaceException("Workspace name is required", 500);
+        }
+
         // 1) create workspace
         Log::info("Set up default workspace");
         $workspace = new ModelWorkspace();
-        $workspace->name = $name;
-        $workspace->description = $wsDescription;
+        $workspace->name = $workspaceData->getName();
+        $workspace->description = $workspaceData->getDescription();
         $workspace->user_id = $userId;
-        $workspace->uuid = \Ramsey\Uuid\Uuid::uuid4()->toString();
+        $workspace->uuid = $workspaceData->getUuid();
         $workspace->save();
 
         $workspace->users()->attach(User::find($userId));
@@ -80,19 +86,17 @@ class WorkspaceService
         }
 
         // 2) create new wallet
-        $uuid = \Ramsey\Uuid\Uuid::uuid4()->toString();
         Log::info("Create new Wallet entry");
 
         $wallet = new Wallet();
-        $wallet->uuid = $uuid;
-        $wallet->name = EntityWallet::cache->value;
-        $randomColor = '#' . substr(md5(rand()), 0, 6);
-        $wallet->color = $randomColor;
-        $wallet->type = EntityWallet::cache->value;
-        $wallet->balance = 0;
+        $wallet->uuid = $walletData->getUuid();
+        $wallet->name = $walletData->getName();
+        $wallet->color = $walletData->getColor();
+        $wallet->type = $walletData->getWalletType();
+        $wallet->balance = $walletData->getBalance();
         $wallet->installement_value = 0;
-        $wallet->currency = self::DEFAULT_CURRENCY;
-        $wallet->exclude_from_stats = 0;
+        $wallet->currency = $walletData->getCurrencyId();
+        $wallet->exclude_from_stats = $walletData->getExcludeFromStats();
         $wallet->workspace_id = $wsId;
         $wallet->save();
 

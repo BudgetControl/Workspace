@@ -1,4 +1,5 @@
 <?php
+
 namespace Budgetcontrol\Test;
 
 use MLAB\PHPITest\Entity\Json;
@@ -25,7 +26,7 @@ class WorkspaceControllerTest extends BaseCase
         $assertionContent->assertJsonStructure(
             file_get_json(__DIR__ . '/assertions/workspace-list.json')
         );
-        
+
         $this->assertEquals(200, $result->getStatusCode());
     }
 
@@ -42,7 +43,7 @@ class WorkspaceControllerTest extends BaseCase
         $assertionContent->assertJsonStructure(
             file_get_json(__DIR__ . '/assertions/last-workspace.json')
         );
-        
+
         $this->assertEquals(200, $result->getStatusCode());
         $this->assertEquals('application/json', $result->getHeaderLine('Content-Type'));
         $this->assertEquals($contentArray->user->email, 'mario.rossi@email.it');
@@ -61,7 +62,7 @@ class WorkspaceControllerTest extends BaseCase
         $assertionContent->assertJsonStructure(
             file_get_json(__DIR__ . '/assertions/workspace.json')
         );
-        
+
         $this->assertEquals(200, $result->getStatusCode());
         $this->assertEquals('application/json', $result->getHeaderLine('Content-Type'));
         $this->assertEquals($contentArray->user->email, 'mario.rossi@email.it');
@@ -74,8 +75,19 @@ class WorkspaceControllerTest extends BaseCase
         $arg = ['userId' => 1];
 
         $payload = [
-            'name' => 'Test Workspace',
-            'description' => 'Test Workspace Description',
+            'workspace' => [
+                'name' => 'Test Workspace',
+                'currency' => 2,
+                'payment_type' => 1
+            ],
+            'wallet' => [
+                'name' => 'Test Wallet',
+                'balance' => 0,
+                'type' => 'bank',
+                'color' => '#3dafac',
+                'currency' => 2,
+                'exclude_from_stats' => 0
+            ]
         ];
 
         $request->method('getParsedBody')->willReturn($payload);
@@ -94,8 +106,11 @@ class WorkspaceControllerTest extends BaseCase
         $arg = ['userId' => 1];
 
         $payload = [
-            'name' => 'Test Workspace with Relations',
-            'description' => 'Test Workspace Description',
+            'workspace' => [
+                'name' => 'Test Workspace with Relations',
+                'currency' => 2,
+                'payment_type' => 1
+            ],
             'shareWith' => ['4373a9a3-a481-4d5a-b8fe-c2571be7efe3'],
         ];
 
@@ -112,21 +127,20 @@ class WorkspaceControllerTest extends BaseCase
 
         $this->assertEquals($workspace->users->count(), 2);
         foreach ($workspace->users as $user) {
-            $this->assertContains($user->email, ['mario.verdi@email.it', 'mario.rossi@email.it' ]);
+            $this->assertContains($user->email, ['mario.verdi@email.it', 'mario.rossi@email.it']);
         }
 
         // assert email sended
         $email = file_get_contents(__DIR__ . '/assertions/email.txt');
         $this->assertStringContainsString('This email was sent to mario.verdi@email.it.', $email);
         $this->assertStringContainsString('Check out [Test Workspace with Relations], a workspace that Mario has shared with you. You can find it in your workspace settings and on the sidebar.', $email);
-
     }
 
     public function testUpdate()
     {
         $request = $this->createMock(Request::class);
         $response = $this->createMock(Response::class);
-        $arg = ['userId' => 1,'wsId' => '4373a9a3-a481-4d5a-b8fe-c0571be7efe3'];
+        $arg = ['userId' => 1, 'wsId' => '4373a9a3-a481-4d5a-b8fe-c0571be7efe3'];
 
         $payload = [
             'name' => 'Test Workspace update',
@@ -149,7 +163,7 @@ class WorkspaceControllerTest extends BaseCase
     {
         $request = $this->createMock(Request::class);
         $response = $this->createMock(Response::class);
-        $arg = ['userId' => 1,'wsId' => '4373a9a3-a481-4d5a-b8fe-c0571be7efe3'];
+        $arg = ['userId' => 1, 'wsId' => '4373a9a3-a481-4d5a-b8fe-c0571be7efe3'];
 
         $result = $this->controller->activate($request, $response, $arg);
 
