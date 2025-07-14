@@ -56,7 +56,7 @@ class WorkspaceService
      * create workspace
      * when user create a new Workspaces he must create a Wallet and setup the default user settings
      */
-    public static function createNewWorkspace(string $name, string $wsDescription, int $userId): Workspace
+    public static function createNewWorkspace(string $name, string $wsDescription, int $userId, string $walletName): Workspace
     {
         //check if user id is valid
         if(empty(User::find($userId))) {
@@ -89,7 +89,7 @@ class WorkspaceService
 
         $wallet = new Wallet();
         $wallet->uuid = $uuid;
-        $wallet->name = EntityWallet::cache->value;
+        $wallet->name = $walletName;
         $randomColor = '#' . substr(md5(rand()), 0, 6);
         $wallet->color = $randomColor;
         $wallet->type = EntityWallet::cache->value;

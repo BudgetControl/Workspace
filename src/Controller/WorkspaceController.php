@@ -120,7 +120,8 @@ class WorkspaceController
             $params = $request->getParsedBody();
             $wsName = $params['name'];
             $wsDescription = $params['description'] ?? '';
-            $toInsert = WorkspaceService::createNewWorkspace($wsName, $wsDescription, $userId);
+            $walletName = $params['wallet_name'] ?? 'Main Wallet';
+            $toInsert = WorkspaceService::createNewWorkspace($wsName, $wsDescription, $userId, $walletName);
             $wsId = $toInsert->getWorkspace()->uuid;
 
             $service = new WorkspaceService($arg['userId'], $wsId);
