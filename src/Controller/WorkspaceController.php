@@ -130,10 +130,10 @@ class WorkspaceController
             $wallet = new Wallet(
                 $params['wallet']['name'],
                 $params['wallet']['balance'],
-                EntityWallet::from($params['wallet']['walletType']),
+                EntityWallet::from($params['wallet']['type']),
                 $params['wallet']['color'],
-                $params['wallet']['currencyId'],
-                $params['wallet']['excludeFromStats'] ?? false
+                $params['wallet']['currency'],
+                $params['wallet']['exclude_from_stats'] ?? false
             );
 
             $workspace = new Workspace(
