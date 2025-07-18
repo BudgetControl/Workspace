@@ -39,12 +39,17 @@ class WorkspaceController
     {
         $userId = $arg['userId'];
         $service = WorkspaceService::getWorkspacesList($userId);
+        $wsSetting = json_decode($service['data']);
+
+        $serviceResponse = array_merge($service, [
+            'settings' => $wsSetting
+        ]);
 
         if (empty($service)) {
             return response(["error" => "No workspaces found"], 404);
         }
 
-        return response($service);
+        return response($serviceResponse);
     }
 
     /**
