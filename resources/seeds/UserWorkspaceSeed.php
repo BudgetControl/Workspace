@@ -26,7 +26,7 @@ class UserWorkspaceSeed extends AbstractSeed
 
         \Budgetcontrol\Library\Model\User::create([
             'name' => 'Rossi',
-            'email' => 'mario.verdi@email.it',
+            'email' => 'mario.gialli@email.it',
             'password' => 'password',
             'uuid' => '4373a9a3-a481-4d5a-b8fe-c2571be7efe5',
         ]);

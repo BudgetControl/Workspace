@@ -193,7 +193,7 @@ class WorkspaceControllerTest extends BaseCase
         $arg = ['userId' => 1, 'wsId' => '4373a9a3-a481-4d5a-b8fe-c0571be7efe3'];
 
         $payload = [
-            'user_to_share' => 'mario.verdi@email.it',
+            'user_to_share' => 'mario.gialli@email.it',
         ];
 
         $request->method('getParsedBody')->willReturn($payload);
