@@ -14,10 +14,10 @@ use Budgetcontrol\Library\Model\Workspace as ModelWorkspace;
 use Budgetcontrol\Library\Model\User;
 use Budgetcontrol\Library\Model\Wallet;
 use Budgetcontrol\Library\ValueObject\WorkspaceSetting;
-use Budgetcontrol\Workspace\Domain\Model\WorkspaceSettings;
 use Budgetcontrol\Workspace\Domain\Repository\WorkspaceRepository;
 use Budgetcontrol\Workspace\ValueObjects\Wallet as ValueObjectsWallet;
 use Budgetcontrol\Workspace\ValueObjects\Workspace as ValueObjectsWorkspace;
+use Budgetcontrol\Library\Model\WorkspaceSettings;
 
 /**
  * Represents a service for managing workspaces.
@@ -221,6 +221,19 @@ class WorkspaceService
     {
         $ws = ModelWorkspace::where('uuid', $wsId)->first();
         $ws->users()->attach($user);
+    }
+
+    /**
+     * Unshares a workspace with a user.
+     *
+     * @param string $wsId The ID of the workspace to be unshared.
+     * @param User $user The user to unshare the workspace with.
+     * @return void
+     */
+    public static function unShareWorkspace(string $wsId, User $user): void
+    {
+        $ws = ModelWorkspace::where('uuid', $wsId)->first();
+        $ws->users()->detach($user);
     }
 
     /**

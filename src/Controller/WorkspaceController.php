@@ -2,12 +2,9 @@
 
 namespace Budgetcontrol\Workspace\Controller;
 
-use Budgetcontrol\Library\Entity\Entry;
 use Throwable;
 use Budgetcontrol\Library\Model\Currency;
-use Budgetcontrol\Workspace\Domain\Model\User;
 use Budgetcontrol\Library\Model\WorkspaceSettings;
-use Budgetcontrol\Workspace\Domain\Model\Workspace as WorkspaceModel;
 use Psr\Http\Message\ResponseInterface as Response;
 use Budgetcontrol\Workspace\Service\WorkspaceService;
 use Budgetcontrol\Library\ValueObject\WorkspaceSetting;
@@ -15,6 +12,9 @@ use Budgetcontrol\Workspace\ValueObjects\Wallet;
 use Budgetcontrol\Workspace\ValueObjects\Workspace;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Budgetcontrol\Library\Entity\Wallet as EntityWallet;
+use Budgetcontrol\Library\Model\User;
+use Budgetcontrol\Library\Model\Workspace as WorkspaceModel;
+use BudgetcontrolLibs\Crypt\Traits\Crypt;
 
 /**
  * Class WorkspaceController
@@ -24,8 +24,14 @@ use Budgetcontrol\Library\Entity\Wallet as EntityWallet;
  */
 class WorkspaceController
 {
+    use Crypt;
 
     const DEFAULT_CURRENCY = 2;
+
+    public function __construct()
+    {
+        $this->key = env('APP_KEY');
+    }
 
     /**
      * List all workspaces.
@@ -229,19 +235,57 @@ class WorkspaceController
         return response([], 201);
     }
 
+    /**
+     * Shares a workspace with specified users or entities.
+     *
+     * @param Request $request  The HTTP request object containing share details.
+     * @param Response $response The HTTP response object for returning results.
+     * @param mixed $arg        Additional arguments, such as workspace identifier.
+     *
+     * @return Response         The HTTP response after processing the share action.
+     */
     public function share(Request $request, Response $response, $arg): Response
     {
         $wsId = $arg['wsId'];
         $params = $request->getParsedBody();
 
         $userToShare = $params['user_to_share'];
-        $user = $user = User::where('uuid', $userToShare);
+
+        //check if is an email or uuid
+        if (filter_var($userToShare, FILTER_VALIDATE_EMAIL)) {
+            $user = User::where('email', $this->encrypt($userToShare));
+        } else {
+            $user = User::where('uuid', $userToShare);
+        }
 
         if ($user->count() == 0) {
             return response(["error" => "No user found"], 404);
         }
 
         WorkspaceService::shareWorkspace($wsId, $user->first());
+        return response([], 201);
+    }
+
+    /**
+     * Handles the unsharing of a workspace.
+     *
+     * @param Request $request The HTTP request object.
+     * @param Response $response The HTTP response object.
+     * @param mixed $arg Additional arguments, typically route parameters.
+     * @return Response The HTTP response after processing the unshare action.
+     */
+    public function unShare(Request $request, Response $response, $arg): Response
+    {
+        $wsId = $arg['wsId'];
+        $userUuid = $arg['userUuid'];
+
+        $user = User::where('uuid', $userUuid);
+
+        if ($user->count() == 0) {
+            return response(["error" => "No user found"], 404);
+        }
+
+        WorkspaceService::unShareWorkspace($wsId, $user->first());
         return response([], 201);
     }
 
