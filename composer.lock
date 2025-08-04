@@ -192,16 +192,16 @@
         },
         {
             "name": "budgetcontrol/library",
-            "version": "v1.4.6",
+            "version": "1.4.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BudgetControl/Library.git",
-                "reference": "66867333337e2c0aa28a751d15aaec49dff5ab07"
+                "reference": "11876771c6c1fdc440afb4313e99a6aabbf37427"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BudgetControl/Library/zipball/66867333337e2c0aa28a751d15aaec49dff5ab07",
-                "reference": "66867333337e2c0aa28a751d15aaec49dff5ab07",
+                "url": "https://api.github.com/repos/BudgetControl/Library/zipball/11876771c6c1fdc440afb4313e99a6aabbf37427",
+                "reference": "11876771c6c1fdc440afb4313e99a6aabbf37427",
                 "shasum": ""
             },
             "require": {
@@ -223,9 +223,9 @@
                 }
             ],
             "support": {
-                "source": "https://github.com/BudgetControl/Library/tree/v1.4.6"
+                "source": "https://github.com/BudgetControl/Library/tree/1.4.7"
             },
-            "time": "2025-07-31T07:21:52+00:00"
+            "time": "2025-08-04T15:39:21+00:00"
         },
         {
             "name": "budgetcontrol/mailer",
