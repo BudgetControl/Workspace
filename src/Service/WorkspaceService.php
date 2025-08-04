@@ -224,6 +224,19 @@ class WorkspaceService
     }
 
     /**
+     * Unshares a workspace with a user.
+     *
+     * @param string $wsId The ID of the workspace to be unshared.
+     * @param User $user The user to unshare the workspace with.
+     * @return void
+     */
+    public static function unShareWorkspace(string $wsId, User $user): void
+    {
+        $ws = ModelWorkspace::where('uuid', $wsId)->first();
+        $ws->users()->detach($user);
+    }
+
+    /**
      * Share the workspace with the specified users.
      *
      * @param array $usersToShare An array of users uuid to share the workspace with.

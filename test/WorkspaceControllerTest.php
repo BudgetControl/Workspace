@@ -170,23 +170,48 @@ class WorkspaceControllerTest extends BaseCase
         $this->assertEquals(201, $result->getStatusCode());
     }
 
-    // public function testShare()
-    // {
-    //     $request = $this->createMock(Request::class);
-    //     $response = $this->createMock(Response::class);
-    //     $arg = ['userId' => 1, 'wsId' => '4373a9a3-a481-4d5a-b8fe-c0571be7efe3'];
+    public function testShareWithUUID()
+    {
+        $request = $this->createMock(Request::class);
+        $response = $this->createMock(Response::class);
+        $arg = ['userId' => 1, 'wsId' => '4373a9a3-a481-4d5a-b8fe-c0571be7efe3'];
 
-    //     $payload = [
-    //         'user_to_share' => 'Test Workspace Description update',
-    //     ];
+        $payload = [
+            'user_to_share' => '4373a9a3-a481-4d5a-b8fe-c2571be7efe4',
+        ];
 
-    //     $request->method('getParsedBody')->willReturn($payload);
+        $request->method('getParsedBody')->willReturn($payload);
+        $result = $this->controller->share($request, $response, $arg);
 
-    //     $result = $this->controller->share($request, $response, $arg);
-    //     $contentArray = json_decode((string) $result->getBody());
+        $this->assertEquals(201, $result->getStatusCode());
+    }
 
-    //     $this->assertEquals(201, $result->getStatusCode());
-    // }
+    public function testShareWithEmail()
+    {
+        $request = $this->createMock(Request::class);
+        $response = $this->createMock(Response::class);
+        $arg = ['userId' => 1, 'wsId' => '4373a9a3-a481-4d5a-b8fe-c0571be7efe3'];
+
+        $payload = [
+            'user_to_share' => 'mario.verdi@email.it',
+        ];
+
+        $request->method('getParsedBody')->willReturn($payload);
+        $result = $this->controller->share($request, $response, $arg);
+
+        $this->assertEquals(201, $result->getStatusCode());
+    }
+
+    public function testUnShare()
+    {
+        $request = $this->createMock(Request::class);
+        $response = $this->createMock(Response::class);
+        $arg = ['userId' => 1, 'wsId' => '4373a9a3-a481-4d5a-b8fe-c0571be7efe3', 'userUuid' => '4373a9a3-a481-4d5a-b8fe-c2571be7efe4'];
+
+        $result = $this->controller->unShare($request, $response, $arg);
+
+        $this->assertEquals(201, $result->getStatusCode());
+    }
 
     public function testDelete()
     {
