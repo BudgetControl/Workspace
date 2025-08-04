@@ -32,7 +32,7 @@ class WorkspaceService
     const DEFAULT_CURRENCY = 2;
     const DEFAULT_PAYMENT_TYPE = 1;
 
-    public function __construct(int $userId, string $uuid = null)
+    public function __construct(int $userId, ?string $uuid = null)
     {   
         $this->userId = $userId;
         $this->repository = new WorkspaceRepository();
