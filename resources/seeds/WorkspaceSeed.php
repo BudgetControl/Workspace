@@ -22,11 +22,6 @@ class WorkspaceSeed extends AbstractSeed
         );
 
         DB::table('workspaces_users_mm')->insert([
-            'workspace_id' => 1,
-            'user_id' => 1,
-        ]);
-
-        DB::table('workspaces_users_mm')->insert([
             'workspace_id' => 2,
             'user_id' => 1,
         ]);

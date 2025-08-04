@@ -2,12 +2,9 @@
 
 namespace Budgetcontrol\Workspace\Controller;
 
-use Budgetcontrol\Library\Entity\Entry;
 use Throwable;
 use Budgetcontrol\Library\Model\Currency;
-use Budgetcontrol\Workspace\Domain\Model\User;
 use Budgetcontrol\Library\Model\WorkspaceSettings;
-use Budgetcontrol\Workspace\Domain\Model\Workspace as WorkspaceModel;
 use Psr\Http\Message\ResponseInterface as Response;
 use Budgetcontrol\Workspace\Service\WorkspaceService;
 use Budgetcontrol\Library\ValueObject\WorkspaceSetting;
@@ -15,6 +12,9 @@ use Budgetcontrol\Workspace\ValueObjects\Wallet;
 use Budgetcontrol\Workspace\ValueObjects\Workspace;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Budgetcontrol\Library\Entity\Wallet as EntityWallet;
+use Budgetcontrol\Library\Model\User;
+use Budgetcontrol\Library\Model\Workspace as WorkspaceModel;
+use BudgetcontrolLibs\Crypt\Traits\Crypt;
 
 /**
  * Class WorkspaceController
@@ -24,8 +24,14 @@ use Budgetcontrol\Library\Entity\Wallet as EntityWallet;
  */
 class WorkspaceController
 {
+    use Crypt;
 
     const DEFAULT_CURRENCY = 2;
+
+    public function __construct()
+    {
+        $this->key = env('APP_KEY');
+    }
 
     /**
      * List all workspaces.
@@ -247,7 +253,7 @@ class WorkspaceController
 
         //check if is an email or uuid
         if (filter_var($userToShare, FILTER_VALIDATE_EMAIL)) {
-            $user = User::where('email', $userToShare);
+            $user = User::where('email', $this->encrypt($userToShare));
         } else {
             $user = User::where('uuid', $userToShare);
         }

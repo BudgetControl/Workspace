@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 use Budgetcontrol\Library\Model\Currency;
 use Budgetcontrol\Library\ValueObject\WorkspaceSetting;
-use Budgetcontrol\Workspace\Domain\Model\User;
 use Phinx\Seed\AbstractSeed;
-use Budgetcontrol\Workspace\Domain\Model\WorkspaceSettings as Model;
-
+use Budgetcontrol\Library\Model\WorkspaceSettings as Model;
 class WorkspaceSettings extends AbstractSeed
 {
     /**

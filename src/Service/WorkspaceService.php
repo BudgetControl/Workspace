@@ -14,10 +14,10 @@ use Budgetcontrol\Library\Model\Workspace as ModelWorkspace;
 use Budgetcontrol\Library\Model\User;
 use Budgetcontrol\Library\Model\Wallet;
 use Budgetcontrol\Library\ValueObject\WorkspaceSetting;
-use Budgetcontrol\Workspace\Domain\Model\WorkspaceSettings;
 use Budgetcontrol\Workspace\Domain\Repository\WorkspaceRepository;
 use Budgetcontrol\Workspace\ValueObjects\Wallet as ValueObjectsWallet;
 use Budgetcontrol\Workspace\ValueObjects\Workspace as ValueObjectsWorkspace;
+use Budgetcontrol\Library\Model\WorkspaceSettings;
 
 /**
  * Represents a service for managing workspaces.
