@@ -2,7 +2,8 @@
 
 namespace Budgetcontrol\Workspace\Service;
 
-use Budgetcontrol\Library\Entity\Wallet as EntityWallet;
+use Budgetcontrol\Connector\Entities\Payloads\Mailer\SharedWorkspace;
+use Budgetcontrol\Connector\Entities\Payloads\Notification\PushNotification;
 use Budgetcontrol\Library\Model\Currency;
 use Illuminate\Support\Facades\Log;
 use Budgetcontrol\Workspace\Facade\Mail;
@@ -18,6 +19,7 @@ use Budgetcontrol\Workspace\Domain\Repository\WorkspaceRepository;
 use Budgetcontrol\Workspace\ValueObjects\Wallet as ValueObjectsWallet;
 use Budgetcontrol\Workspace\ValueObjects\Workspace as ValueObjectsWorkspace;
 use Budgetcontrol\Library\Model\WorkspaceSettings;
+use Budgetcontrol\Workspace\Facade\Client;
 
 /**
  * Represents a service for managing workspaces.
@@ -124,6 +126,14 @@ class WorkspaceService
      * retrive WS informations
      */
     public function getWorkspace(): Workspace
+    {
+        return $this->workspace;
+    }
+
+    /**
+     * retrive WS informations
+     */
+    public function getSharedWorkspace(): Workspace
     {
         return $this->workspace;
     }
@@ -259,17 +269,24 @@ class WorkspaceService
             $this->workspace->getWorkspace()->users()->attach($userFound);
 
             try{
-                $emailView = new ShareWorkspaceView();
-                $emailView->setUserEmail($userFound->email);
-                $emailView->setUserName($userFound->name);
-                $emailView->setWorkspaceName($this->workspace->getWorkspace()->name);
-                $emailView->setUserFrom($this->workspace->getUser()->name);
-                $subject = $this->workspace->getUser()->name." has just shared his Wallet (".$this->workspace->getWorkspace()->name.") with you. Access Budget Control to view it";
-                
-                Mail::send($userFound->email, $subject, $emailView);
+                Client::mailer()->sharedWorkspace(new SharedWorkspace(
+                    $userFound->email,
+                    $this->workspace->getWorkspace()->name,
+                    $this->workspace->getUser()->name,
+                    '',
+                    ''
+                ));
+
+                Client::pushNotification()->notificationMessageToUser(
+                    $userFound->uuid,
+                    new PushNotification(
+                        "Workspace shared",
+                        "You have been shared the workspace: " . $this->workspace->getWorkspace()->name
+                    )
+                );
 
             } catch (\Throwable $e) {
-                Log::error("Error sharing workspace, could not send email: " . $e->getMessage());
+                Log::error("Error sharing workspace, could not send email: " . $e->getMessage($this->workspace->getUser()->uuid));
             }
         }
         

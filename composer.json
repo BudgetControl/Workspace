@@ -62,7 +62,8 @@
         "budgetcontrol/mailer": "^v0.2",
         "budgetcontrol/library": "^v1.2",
         "budgetcontrol/cryptable": "^v0.1",
-        "bref/bref": "~2.4.1"
+        "bref/bref": "~2.4.1",
+        "budgetcontrol/connector": "dev-alpha-2.0"
     },
     "require-dev": {
         "nikic/php-parser": "^5.0",
@@ -87,5 +88,5 @@
             "email": "marco.defelice@mlabfactory.it"
         }
     ],
-    "minimum-stability": "stable"
+    "minimum-stability": "alpha"
 }

@@ -31,8 +31,12 @@ require_once __DIR__ . '/../config/logger.php';
 /** mail configuration */
 require_once __DIR__ . '/../config/mail.php';
 
+// Set up the client connector
+require_once __DIR__ . '/../config/client-connector.php';
+
 Facade::setFacadeApplication([
     'log' => $logger,
     'date' => new Date(),
-    'mail' => $mail
+    'mail' => $mail,
+    'client' => $clientConnector
 ]);
