@@ -35,13 +35,13 @@ class WorkspaceService
     const DEFAULT_PAYMENT_TYPE = 1;
 
     public function __construct(int $userId, ?string $uuid = null)
-    {   
+    {
         $this->userId = $userId;
         $this->repository = new WorkspaceRepository();
 
-        if(empty($uuid)) {
+        if (empty($uuid)) {
             $this->workspace = self::getLastWorkspace($userId);
-        }else{
+        } else {
 
             $workspace = $this->repository->getWorkspaceWithUsers($uuid);
             $workspaceSettings = $this->repository->getWorkspaceSettigs($workspace);
@@ -52,7 +52,6 @@ class WorkspaceService
                 $workspaceSettings,
                 $user
             );
-
         }
     }
 
@@ -63,11 +62,11 @@ class WorkspaceService
     public static function createNewWorkspace(ValueObjectsWorkspace $workspaceData, ValueObjectsWallet $walletData, int $userId): Workspace
     {
         //check if user id is valid
-        if(empty(User::find($userId))) {
+        if (empty(User::find($userId))) {
             throw new WorkspaceException("No user found", 500);
         }
 
-        if(empty($workspaceData->getName())) {
+        if (empty($workspaceData->getName())) {
             throw new WorkspaceException("Workspace name is required", 500);
         }
 
@@ -83,7 +82,7 @@ class WorkspaceService
         $workspace->users()->attach(User::find($userId));
         $wsId = $workspace->id;
 
-        if(empty($wsId)) {
+        if (empty($wsId)) {
             throw new WorkspaceException("No Workspace found", 500);
         }
 
@@ -102,7 +101,7 @@ class WorkspaceService
         $wallet->workspace_id = $wsId;
         $wallet->save();
 
-        $defaultCurrency = Currency::where('id',self::DEFAULT_CURRENCY)->first();
+        $defaultCurrency = Currency::where('id', self::DEFAULT_CURRENCY)->first();
         $workspaceSettings = WorkspaceSetting::create($defaultCurrency, self::DEFAULT_PAYMENT_TYPE);
 
         // 3) setup default settings
@@ -152,7 +151,7 @@ class WorkspaceService
         limit 1;
         ");
 
-        if(empty($ws)) {
+        if (empty($ws)) {
             throw new WorkspaceException("No workspace found", 404);
         }
 
@@ -197,7 +196,7 @@ class WorkspaceService
 
         return $ws;
     }
-    
+
     /**
      * Sets the current workspace for a user.
      *
@@ -208,15 +207,15 @@ class WorkspaceService
     public static function activateWorkspace(string $wsId, int $userId): void
     {
         $workspaces = self::getWorkspacesList($userId);
-        foreach($workspaces as $workspace) {
+        foreach ($workspaces as $workspace) {
             $current = false;
-            if($workspace->uuid == $wsId) {
+            if ($workspace->uuid == $wsId) {
                 $current = true;
             }
 
             $ws = ModelWorkspace::where('uuid', $wsId)->first();
-                $ws->current = $current;
-                $ws->save();
+            $ws->current = $current;
+            $ws->save();
         }
     }
 
@@ -260,36 +259,21 @@ class WorkspaceService
         //atttach current user
         $this->workspace->getWorkspace()->users()->attach($this->workspace->getUser());
 
-        foreach($usersToShare as $user) {
+        foreach ($usersToShare as $user) {
             $userFound = User::where('uuid', $user)->first();
-            if(empty($userFound)) {
+            if (empty($userFound)) {
                 Log::error("No user found with id: " . $userFound);
             }
 
             $this->workspace->getWorkspace()->users()->attach($userFound);
 
-            try{
-                Client::mailer()->sharedWorkspace(new SharedWorkspace(
-                    $userFound->email,
-                    $this->workspace->getWorkspace()->name,
-                    $this->workspace->getUser()->name,
-                    '',
-                    ''
-                ));
+            //send email notification
+            $this->sendWorkspaceShareEmail($userFound);
 
-                Client::pushNotification()->notificationMessageToUser(
-                    $userFound->uuid,
-                    new PushNotification(
-                        "Workspace shared",
-                        "You have been shared the workspace: " . $this->workspace->getWorkspace()->name
-                    )
-                );
-
-            } catch (\Throwable $e) {
-                Log::error("Error sharing workspace, could not send email: " . $e->getMessage($this->workspace->getUser()->uuid));
-            }
+            //send push notification
+            $this->sendPushNotification($userFound);
+            
         }
-        
     }
 
     public function workspaceRelationsUsers(int $wsId): array
@@ -302,5 +286,35 @@ class WorkspaceService
         ");
 
         return $users;
+    }
+
+    protected function sendWorkspaceShareEmail(User $userFound): void
+    {
+        try {
+            Client::mailer()->sharedWorkspace(new SharedWorkspace(
+                $userFound->email,
+                $this->workspace->getWorkspace()->name,
+                $this->workspace->getUser()->name,
+                '',
+                ''
+            ));
+        } catch (\Throwable $e) {
+            Log::error("Error sharing workspace, could not send email: " . $e->getMessage($this->workspace->getUser()->uuid));
+        }
+    }
+
+    protected function sendPushNotification(User $userFound): void
+    {
+        try {
+            Client::pushNotification()->notificationMessageToUser(
+                $userFound->uuid,
+                new PushNotification(
+                    "Workspace shared",
+                    "You have been shared the workspace: " . $this->workspace->getWorkspace()->name
+                )
+            );
+        } catch (\Throwable $e) {
+            Log::error("Error sharing workspace, could not send push notification: " . $e->getMessage());
+        }
     }
 }
