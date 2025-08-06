@@ -3,6 +3,7 @@ namespace Budgetcontrol\Test;
 
 use Illuminate\Support\Facades\Facade;
 use Budgetcontrol\Test\Libs\ClientMail;
+use Budgetcontrol\Test\Libs\Client;
 use Budgetcontrol\Workspace\Controller\WorkspaceController;
 
 class BaseCase extends \PHPUnit\Framework\TestCase
@@ -24,6 +25,7 @@ class BaseCase extends \PHPUnit\Framework\TestCase
             'log' => new \Monolog\Logger('test'),
             'date' => new \Illuminate\Support\Carbon(),
             'mail' => new ClientMail(),
+            'client' => new Client(),
             'crypt' => new \BudgetcontrolLibs\Crypt\Service\CryptableService(
                 env('APP_KEY')
             )

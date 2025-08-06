@@ -6,10 +6,8 @@ use Budgetcontrol\Connector\Entities\Payloads\Mailer\SharedWorkspace;
 use Budgetcontrol\Connector\Entities\Payloads\Notification\PushNotification;
 use Budgetcontrol\Library\Model\Currency;
 use Illuminate\Support\Facades\Log;
-use Budgetcontrol\Workspace\Facade\Mail;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Budgetcontrol\Workspace\Domain\Entity\Workspace;
-use BudgetcontrolLibs\Mailer\View\ShareWorkspaceView;
 use Budgetcontrol\Workspace\Exceptions\WorkspaceException;
 use Budgetcontrol\Library\Model\Workspace as ModelWorkspace;
 use Budgetcontrol\Library\Model\User;
@@ -272,7 +270,7 @@ class WorkspaceService
 
             //send push notification
             $this->sendPushNotification($userFound);
-            
+
         }
     }
 
@@ -299,7 +297,7 @@ class WorkspaceService
                 ''
             ));
         } catch (\Throwable $e) {
-            Log::error("Error sharing workspace, could not send email: " . $e->getMessage($this->workspace->getUser()->uuid));
+            Log::error("Error sharing workspace, could not send email: " . $e->getMessage());
         }
     }
 
