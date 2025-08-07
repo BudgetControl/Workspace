@@ -3,18 +3,22 @@
 namespace Budgetcontrol\Workspace\Controller;
 
 use Throwable;
+use Illuminate\Support\Facades\Log;
+use Budgetcontrol\Library\Model\User;
 use Budgetcontrol\Library\Model\Currency;
+use BudgetcontrolLibs\Crypt\Traits\Crypt;
+use Budgetcontrol\Workspace\Facade\Client;
+use Budgetcontrol\Workspace\ValueObjects\Wallet;
 use Budgetcontrol\Library\Model\WorkspaceSettings;
+use Budgetcontrol\Workspace\ValueObjects\Workspace;
 use Psr\Http\Message\ResponseInterface as Response;
 use Budgetcontrol\Workspace\Service\WorkspaceService;
 use Budgetcontrol\Library\ValueObject\WorkspaceSetting;
-use Budgetcontrol\Workspace\ValueObjects\Wallet;
-use Budgetcontrol\Workspace\ValueObjects\Workspace;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Budgetcontrol\Library\Entity\Wallet as EntityWallet;
-use Budgetcontrol\Library\Model\User;
 use Budgetcontrol\Library\Model\Workspace as WorkspaceModel;
-use BudgetcontrolLibs\Crypt\Traits\Crypt;
+use Budgetcontrol\Connector\Entities\Payloads\Mailer\SharedWorkspace;
+use Budgetcontrol\Connector\Entities\Payloads\Notification\PushNotification;
 
 /**
  * Class WorkspaceController
@@ -157,6 +161,15 @@ class WorkspaceController
             $service = new WorkspaceService($arg['userId'], $wsId);
             if(isset($params['shareWith']) && !empty($params['shareWith'])) {
                 $service->shareWith($params['shareWith']);
+
+                $userToShare = User::where('uuid', $params['shareWith'][0])->first();
+                if (empty($userToShare)) {
+                    Log::error("User to share workspace not found: " . $params['shareWith'][0]);
+                }
+                //send email
+                $this->sendWorkspaceShareEmail($userToShare, WorkspaceModel::where('uuid', $wsId)->first(), User::find($arg['userId']));
+                //send push notification
+                $this->sendPushNotification($userToShare, WorkspaceModel::where('uuid', $wsId)->first());
             }
         } catch (Throwable $e) {
             return response(["error" => $e->getMessage()], 500);
@@ -192,6 +205,15 @@ class WorkspaceController
             $service = new WorkspaceService($arg['userId'], $arg['wsId']);
             if(isset($params['shareWith']) && !empty($params['shareWith'])) {
                 $service->shareWith($params['shareWith']);
+
+                $userToShare = User::where('uuid', $params['shareWith'][0])->first();
+                if (empty($userToShare)) {
+                    Log::error("User to share workspace not found: " . $params['shareWith'][0]);
+                }
+                //send email
+                $this->sendWorkspaceShareEmail($userToShare, WorkspaceModel::where('uuid', $arg['wsId'])->first(), User::find($arg['userId']));
+                //send push notification
+                $this->sendPushNotification($userToShare, WorkspaceModel::where('uuid', $arg['wsId'])->first());
             }
 
             // Update workspace setting
@@ -264,6 +286,14 @@ class WorkspaceController
 
         $userToShare = $user->first();
         WorkspaceService::shareWorkspace($wsId, $userToShare);
+
+        //send email
+        $this->sendWorkspaceShareEmail($userToShare, WorkspaceModel::where('uuid', $wsId)->first(), User::find($arg['userId']));
+
+        //send push notification
+        $this->sendPushNotification($userToShare, WorkspaceModel::where('uuid', $wsId)->first());
+
+
         return response(['message' => 'Workspace shared successfully', 'user' => $userToShare], 201);
     }
 
@@ -308,5 +338,52 @@ class WorkspaceController
 
         $workspace->delete();
         return response([], 201);
+    }
+
+    /**
+     * Sends an email to share a workspace with a user.
+     *
+     * @param User $userTo The user who will receive the workspace share email.
+     * @param WorkspaceModel $workspace The workspace being shared.
+     * @param User $userFrom The user who is sharing the workspace.
+     *
+     * @return void
+     */
+    protected function sendWorkspaceShareEmail(User $userTo, WorkspaceModel $workspace, User $userFrom): void
+    {
+        try {
+            Client::mailer()->sharedWorkspace(new SharedWorkspace(
+                $userTo->email,
+                $workspace->name,
+                $userFrom->name,
+                '',
+                'https://app.budgetcontrol.cloud/app/dashboard'
+            ));
+        } catch (\Throwable $e) {
+            Log::error("Error sharing workspace, could not send email: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Sends a push notification to a specified user regarding a workspace.
+     *
+     * @param User $userTo The user who will receive the push notification.
+     * @param WorkspaceModel $workspace The workspace related to the notification.
+     *
+     * @return void
+     */
+    protected function sendPushNotification(User $userTo, WorkspaceModel $workspace): void
+    {
+        try {
+            Client::pushNotification()->notificationMessageToUser(
+                $userTo->uuid,
+                new PushNotification(
+                    "Workspace shared",
+                    "You have been shared the workspace: " . $workspace->name
+                )
+            );
+        } catch (\Throwable $e) {
+            Log::error("Error sharing workspace, could not send push notification: " . $e->getMessage());
+        }
     }
 }

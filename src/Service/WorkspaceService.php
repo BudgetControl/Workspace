@@ -265,12 +265,6 @@ class WorkspaceService
 
             $this->workspace->getWorkspace()->users()->attach($userFound);
 
-            //send email notification
-            $this->sendWorkspaceShareEmail($userFound);
-
-            //send push notification
-            $this->sendPushNotification($userFound);
-
         }
     }
 
@@ -284,35 +278,5 @@ class WorkspaceService
         ");
 
         return $users;
-    }
-
-    protected function sendWorkspaceShareEmail(User $userFound): void
-    {
-        try {
-            Client::mailer()->sharedWorkspace(new SharedWorkspace(
-                $userFound->email,
-                $this->workspace->getWorkspace()->name,
-                $this->workspace->getUser()->name,
-                '',
-                ''
-            ));
-        } catch (\Throwable $e) {
-            Log::error("Error sharing workspace, could not send email: " . $e->getMessage());
-        }
-    }
-
-    protected function sendPushNotification(User $userFound): void
-    {
-        try {
-            Client::pushNotification()->notificationMessageToUser(
-                $userFound->uuid,
-                new PushNotification(
-                    "Workspace shared",
-                    "You have been shared the workspace: " . $this->workspace->getWorkspace()->name
-                )
-            );
-        } catch (\Throwable $e) {
-            Log::error("Error sharing workspace, could not send push notification: " . $e->getMessage());
-        }
     }
 }
