@@ -182,6 +182,10 @@ class WorkspaceControllerTest extends BaseCase
 
         $request->method('getParsedBody')->willReturn($payload);
         $result = $this->controller->share($request, $response, $arg);
+        $contentArray = json_decode((string) $result->getBody());
+
+        $this->assertEquals($contentArray->user->uuid, '4373a9a3-a481-4d5a-b8fe-c2571be7efe4');
+        $this->assertEquals($contentArray->user->email, 'mario.rossi@email.it');
 
         $this->assertEquals(201, $result->getStatusCode());
     }

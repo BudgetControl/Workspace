@@ -262,8 +262,9 @@ class WorkspaceController
             return response(["error" => "No user found"], 404);
         }
 
-        WorkspaceService::shareWorkspace($wsId, $user->first());
-        return response([], 201);
+        $userToShare = $user->first();
+        WorkspaceService::shareWorkspace($wsId, $userToShare);
+        return response(['message' => 'Workspace shared successfully', 'user' => $userToShare], 201);
     }
 
     /**
