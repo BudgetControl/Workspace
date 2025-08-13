@@ -17,7 +17,8 @@ use Budgetcontrol\Library\ValueObject\WorkspaceSetting;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Budgetcontrol\Library\Entity\Wallet as EntityWallet;
 use Budgetcontrol\Library\Model\Workspace as WorkspaceModel;
-use Budgetcontrol\Connector\Entities\Payloads\Mailer\SharedWorkspace;
+use Budgetcontrol\Connector\Entities\Payloads\Mailer\Workspace\SharedWorkspace;
+use Budgetcontrol\Connector\Entities\Payloads\Mailer\Workspace\UnSharedWorkspace;
 use Budgetcontrol\Connector\Entities\Payloads\Notification\PushNotification;
 
 /**
@@ -361,6 +362,19 @@ class WorkspaceController
             ));
         } catch (\Throwable $e) {
             Log::error("Error sharing workspace, could not send email: " . $e->getMessage());
+        }
+    }
+
+    protected function sendWorkspaceUnShareEmail(User $userTo, WorkspaceModel $workspace, User $userFrom): void
+    {
+        try {
+            Client::mailer()->unSharedWorkspace(new UnSharedWorkspace(
+                $userTo->email,
+                $workspace->name,
+                $userFrom->name,
+            ));
+        } catch (\Throwable $e) {
+            Log::error("Error unsharing workspace, could not send email: " . $e->getMessage());
         }
     }
 
